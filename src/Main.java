@@ -4,25 +4,25 @@ public class Main {
         TaskManager taskManager = new TaskManager();
 
         // Создать новые задачи всех типов
-        ElementTask task1 = new ElementTask("Базовая задача №1", "ОК-001");
+        Task task1 = new Task("Базовая задача №1", "ОК-001");
         taskManager.addTask(task1);
 
-        ElementTask task2 = new ElementTask("Базовая задача №2", "ОК-002");
+        Task task2 = new Task("Базовая задача №2", "ОК-002");
         taskManager.addTask(task2);
 
-        ElementEpic epic1 = new ElementEpic("Эпик №1", "ОК-003");
+        Epic epic1 = new Epic("Эпик №1", "ОК-003");
         taskManager.addEpic(epic1);
 
-        ElementEpic epic2 = new ElementEpic("Эпик №2", "ОК-004");
+        Epic epic2 = new Epic("Эпик №2", "ОК-004");
         taskManager.addEpic(epic2);
 
-        ElementSubtask subtask1 = new ElementSubtask("Подзадача №1", "ОК-005", epic1.id);
+        Subtask subtask1 = new Subtask("Подзадача №1", "ОК-005", epic1.id);
         taskManager.addSubtask(subtask1);
 
-        ElementSubtask subtask2 = new ElementSubtask("Подзадача №2", "ОК-006", epic1.id);
+        Subtask subtask2 = new Subtask("Подзадача №2", "ОК-006", epic1.id);
         taskManager.addSubtask(subtask2);
 
-        ElementSubtask subtask3 = new ElementSubtask("Подзадача №3", "ОК-007", epic2.id);
+        Subtask subtask3 = new Subtask("Подзадача №3", "ОК-007", epic2.id);
         taskManager.addSubtask(subtask3);
 
         // Тестирование редактирования свойств
@@ -48,37 +48,39 @@ public class Main {
         // Вывести на печать все задачи
         System.out.println();
         System.out.println(">> Вывести на печать все задачи");
-        taskManager.getTasks();
-        taskManager.getEpics();
-        taskManager.getSubtasks();
+        taskManager.printTasks(taskManager.getTasks());
+        taskManager.printEpics(taskManager.getEpics());
+        taskManager.printSubtasks(taskManager.getSubtasks());
 
         // Работа с задачами
         System.out.println();
         int searchId = 3;
-        System.out.println(">> Результат поиска ElementEpic по идентификатору " + searchId);
-        taskManager.getEpicByID(searchId);
-        System.out.println(">> Получить список всех подзадач ElementEpic по идентификатору " + searchId);
-        taskManager.getEpicSubtaskByID(searchId);
+        System.out.println(">> Результат поиска элемента типа Epic по идентификатору " + searchId);
+        System.out.println(taskManager.getEpicByID(searchId));
+        System.out.println(">> Получить список всех подзадач элемента типа Epic по идентификатору " + searchId);
+        taskManager.printSubtasks(taskManager.getEpicSubtasksByID(searchId));
 
         System.out.println();
         searchId = 4;
-        System.out.println(">> Результат поиска ElementEpic по идентификатору " + searchId);
-        taskManager.getEpicByID(searchId);
-        System.out.println(">> Удалить ElementEpic по идентификатору " + searchId);
+        System.out.println(">> Результат поиска элемента типа Epic по идентификатору " + searchId);
+        System.out.println(taskManager.getEpicByID(searchId));
+        System.out.println(">> Удалить элемент типа Epic по идентификатору " + searchId);
         taskManager.removeEpicByID(searchId);
 
         System.out.println();
         searchId = 6;
-        System.out.println(">> Результат поиска ElementSubtask по идентификатору " + searchId);
-        taskManager.getSubtaskByID(searchId);
-        System.out.println(">> Удалить ElementSubtask по идентификатору " + searchId);
+        System.out.println(">> Результат поиска элемента типа Subtask по идентификатору " + searchId);
+        System.out.println(taskManager.getSubtaskByID(searchId));
+        System.out.println(">> Удалить элемент типа Subtask по идентификатору " + searchId);
         taskManager.removeSubtaskByID(searchId);
+
+        taskManager.getTaskByID(1);
 
         // Вывести на печать все оставшиеся задачи
         System.out.println();
         System.out.println(">> Вывести на печать все оставшиеся задачи");
-        taskManager.getTasks();
-        taskManager.getEpics();
-        taskManager.getSubtasks();
+        taskManager.printTasks(taskManager.getTasks());
+        taskManager.printEpics(taskManager.getEpics());
+        taskManager.printSubtasks(taskManager.getSubtasks());
     }
 }

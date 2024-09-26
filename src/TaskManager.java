@@ -2,179 +2,186 @@ import java.util.ArrayList;
 import java.util.HashMap;
 public class TaskManager {
 
-    public HashMap<Integer, ElementTask> tasks = new HashMap<>();
-    public HashMap<Integer, ElementSubtask> subtasks = new HashMap<>();
-    public HashMap<Integer, ElementEpic> epics = new HashMap<>();
-    public int sequence = 1;
+    public HashMap<Integer, Task> tasks = new HashMap<>();
+    public HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    public HashMap<Integer, Epic> epics = new HashMap<>();
+    public int sequence = 0;
 
     // *******************************************************
     // Создание задач
     // *******************************************************
-    public void addTask(ElementTask task) {
+    public void addTask(Task task) {
         task.id = getNextVal();
         tasks.put(task.id, task);
     }
 
-    public void addEpic(ElementEpic epic) {
+    public void addEpic(Epic epic) {
         epic.id = getNextVal();
         epics.put(epic.id, epic);
     }
 
-    public void addSubtask(ElementSubtask subtask) {
+    public void addSubtask(Subtask subtask) {
         subtask.id = getNextVal();
         subtasks.put(subtask.id, subtask);
 
-        ElementEpic epic = epics.get(subtask.epicId);
+        Epic epic = epics.get(subtask.epicId);
         epic.subtaskIds.add(subtask.id);
+
+        actualizeEpicStatus(epic);
     }
 
     // *******************************************************
-    // Обновление задач
+    // Редактирование задач
     // *******************************************************
-    public void updateTask(ElementTask task) {
+    public void updateTask(Task task) {
         tasks.put(task.id, task);
     }
 
-    public void updateEpic(ElementEpic epic) {
+    public void updateEpic(Epic epic) {
         epics.put(epic.id, epic);
     }
 
-    public void updateSubtask(ElementSubtask subtask) {
+    public void updateSubtask(Subtask subtask) {
         subtasks.put(subtask.id, subtask);
-        ElementEpic epic = epics.get(subtask.epicId);
+        Epic epic = epics.get(subtask.epicId);
         actualizeEpicStatus(epic);
     }
 
     // *******************************************************
     // Получение задач
     // *******************************************************
-    public void getTasks() {
-        for (ElementTask task : tasks.values()) {
+    public ArrayList<Task> getTasks() {
+        return new ArrayList<>(tasks.values());
+    }
+
+    public ArrayList<Epic> getEpics() {
+        return new ArrayList<>(epics.values());
+    }
+
+    public ArrayList<Subtask> getSubtasks() {
+        return new ArrayList<>(subtasks.values());
+    }
+
+    public void printTasks(ArrayList<Task> tasksArr) {
+        for (Task task : tasksArr) {
             System.out.println(task);
         }
     }
 
-    public void getEpics() {
-        for (ElementEpic epic : epics.values()) {
+    public void printEpics(ArrayList<Epic> epicsArr) {
+        for (Epic epic : epicsArr) {
             System.out.println(epic);
         }
     }
 
-    public void getSubtasks() {
-        for (ElementSubtask subtask : subtasks.values()) {
+    public void printSubtasks(ArrayList<Subtask> subtasksArr) {
+        for (Subtask subtask : subtasksArr) {
             System.out.println(subtask);
         }
     }
 
-    public void getTaskByID(int id) {
-        for (Integer taskId : tasks.keySet()) {
-            if (taskId == id) {
-                System.out.println(tasks.get(taskId));
-                return;
-            }
+    public Task getTaskByID(int id) {
+        Task item = null;
+        item = tasks.get(id);
+        if (item == null) {
+            System.out.println("WARNING: Не удалось найти элемент типа Task по идентификатору " + id);
         }
-        System.out.println("Не удалось найти ElementTask по идентификатору " + id);
+        return item;
     }
 
-    public void getEpicByID(int id) {
-        for (Integer epicId : epics.keySet()) {
-            if (epicId == id) {
-                System.out.println(epics.get(epicId));
-                return;
-            }
+    public Epic getEpicByID(int id) {
+        Epic item = null;
+        item = epics.get(id);
+        if (item == null) {
+            System.out.println("WARNING: Не удалось найти элемент типа Epic по идентификатору " + id);
         }
-        System.out.println("Не удалось найти ElementEpic по идентификатору " + id);
+        return item;
     }
 
-    public void getSubtaskByID(int id) {
-        for (Integer subtaskId : subtasks.keySet()) {
-            if (subtaskId == id) {
-                System.out.println(subtasks.get(subtaskId));
-                return;
-            }
+    public Subtask getSubtaskByID(int id) {
+        Subtask item = null;
+        item = subtasks.get(id);
+        if (item == null) {
+            System.out.println("WARNING: Не удалось найти элемент типа Subtask по идентификатору " + id);
         }
-        System.out.println("Не удалось найти ElementSubtask по идентификатору " + id);
+        return item;
     }
 
-    public void getEpicSubtaskByID(int id) {
-        for (Integer epicId : epics.keySet()) {
-            if (epicId == id) {
-                ArrayList<Integer> subtaskIds = epics.get(epicId).subtaskIds;
-                for (Integer subtaskId : subtaskIds) {
-                    getSubtaskByID(subtaskId);
-                }
-                return;
-            }
+    public ArrayList<Subtask> getEpicSubtasksByID(int id) {
+        ArrayList<Subtask> items = new ArrayList<>();
+        Epic epic = getEpicByID(id);
+        if (epic == null) {
+            System.out.println("WARNING: Не удалось найти элемент типа Epic по идентификатору " + id);
+            return items;
         }
-        System.out.println("Не удалось найти ElementEpic по идентификатору " + id);
+        for (Integer subtaskId : epic.subtaskIds) {
+            items.add(subtasks.get(subtaskId));
+        }
+        return items;
     }
 
     // *******************************************************
     // Удаление задач
     // *******************************************************
     public void removeTasks() {
-        tasks = new HashMap<>();
+        tasks.clear();
     }
 
     public void removeEpics() {
-        epics = new HashMap<>();
+        epics.clear();
+        removeSubtasks();
     }
 
     public void removeSubtasks() {
-        subtasks = new HashMap<>();
+        subtasks.clear();
+        for (Epic epic : getEpics())  {
+            epic.subtaskIds.clear();
+        }
     }
 
     public void removeTaskByID(int id) {
-        for (Integer taskId : tasks.keySet()) {
-            if (taskId == id) {
-                tasks.remove(taskId);
-                System.out.println("ElementTask c идентификатором " + taskId + " успешно удален");
-                return;
-            }
+        Task task = getTaskByID(id);
+        if (task == null) {
+            return;
         }
-        System.out.println("Не удалось найти ElementTask по идентификатору " + id);
+        tasks.remove(task.id);
     }
 
     public void removeEpicByID(int id) {
-        for (Integer epicId : epics.keySet()) {
-            if (epicId == id) {
-                for (Integer subtaskId : epics.get(epicId).subtaskIds) {
-                    subtasks.remove(subtaskId);
-                    System.out.println("ElementSubtask c идентификатором " + subtaskId + " успешно удален");
-                }
-                epics.remove(epicId);
-                System.out.println("ElementEpic c идентификатором " + epicId + " успешно удален");
-                return;
-            }
+        Epic epic = getEpicByID(id);
+        if (epic == null) {
+            return;
         }
-        System.out.println("Не удалось найти ElementEpic по идентификатору " + id);
+        for (Integer subtaskId : epic.subtaskIds) {
+            subtasks.remove(subtaskId);
+            System.out.println("Элемент типа Subtask c идентификатором " + subtaskId + " успешно удален");
+        }
+        epics.remove(epic.id);
+        System.out.println("Элемент типа Epic c идентификатором " + epic.id + " успешно удален");
     }
 
     public void removeSubtaskByID(int id) {
-        for (Integer subtaskId : subtasks.keySet()) {
-            if (subtaskId == id) {
-                ElementSubtask subtask = subtasks.get(subtaskId);
-                ElementEpic epic = epics.get(subtask.epicId);
-                ArrayList<Integer> subtaskIds = epics.get(epic.id).subtaskIds;
-                subtaskIds.remove(subtaskId);
-                System.out.println("ElementEpic c идентификатором " + epic.id + " успешно обновлен");
-                subtasks.remove(subtaskId);
-                System.out.println("ElementSubtask c идентификатором " + subtaskId + " успешно удален");
-                actualizeEpicStatus(epic);
-                return;
-            }
+        Subtask subtask = getSubtaskByID(id);
+        if (subtask == null) {
+            return;
         }
-        System.out.println("Не удалось найти ElementSubtask по идентификатору " + id);
+        Epic epic = epics.get(subtask.epicId);
+        ArrayList<Integer> subtaskIds = epics.get(epic.id).subtaskIds;
+        subtaskIds.remove(Integer.valueOf(subtask.id));
+        System.out.println("Элемент типа Epic c идентификатором " + epic.id + " успешно обновлен");
+        subtasks.remove(subtask.id);
+        System.out.println("Элемент типа Subtask c идентификатором " + subtask.id + " успешно удален");
+        actualizeEpicStatus(epic);
     }
 
     // *******************************************************
     // Вспомогательные методы
     // *******************************************************
-    public void actualizeEpicStatus(ElementEpic epic) {
+    private void actualizeEpicStatus(Epic epic) {
         boolean isNew = true;
         boolean isDone = true;
         for (Integer subtaskId : epic.subtaskIds) {
-            ElementSubtask otherSubtask = subtasks.get(subtaskId);
+            Subtask otherSubtask = subtasks.get(subtaskId);
             if (isNew && otherSubtask.status == StatusTask.NEW) {
                 isDone = false;
             } else if (isDone && otherSubtask.status == StatusTask.DONE) {
@@ -195,6 +202,6 @@ public class TaskManager {
     }
 
     public int getNextVal() {
-        return sequence++;
+        return ++sequence;
     }
 }

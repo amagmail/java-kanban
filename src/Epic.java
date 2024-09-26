@@ -1,16 +1,17 @@
 import java.util.ArrayList;
-public class ElementEpic extends ElementTask {
+public class Epic extends Task {
 
-    public ArrayList<Integer> subtaskIds = new ArrayList<>();
-    private StatusTask status;
+    protected ArrayList<Integer> subtaskIds = new ArrayList<>();
 
-    public ElementEpic(String title, String description) {
+    public Epic(String title, String description) {
         super(title, description);
         setStatus(StatusTask.NEW);
     }
+
     public StatusTask getStatus() {
         return status;
     }
+
     public void setStatus(StatusTask status) {
         this.status = status;
     }

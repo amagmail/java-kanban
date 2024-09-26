@@ -1,8 +1,8 @@
-public class ElementSubtask extends ElementTask {
+public class Subtask extends Task {
 
-    public int epicId;
+    protected int epicId;
 
-    public ElementSubtask(String title, String description, int epicId) {
+    public Subtask(String title, String description, int epicId) {
         super(title, description);
         this.epicId = epicId;
     }

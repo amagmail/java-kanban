@@ -38,8 +38,10 @@ public class Main {
         // Тестирование редактирования статусов
         task1.status = StatusTask.IN_PROGRESS;
         taskManager.updateTask(task1);
+
         task2.status = StatusTask.DONE;
         taskManager.updateTask(task2);
+
         subtask1.status = StatusTask.DONE;
         taskManager.updateSubtask(subtask1);
 

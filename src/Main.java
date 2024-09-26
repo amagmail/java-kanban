@@ -54,7 +54,7 @@ public class Main {
 
         // Работа с задачами
         System.out.println();
-        int searchId = 30;
+        int searchId = 3;
         System.out.println(">> Результат поиска элемента типа Epic по идентификатору " + searchId);
         System.out.println(taskManager.getEpicByID(searchId));
         System.out.println(">> Получить список всех подзадач элемента типа Epic по идентификатору " + searchId);

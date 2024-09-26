@@ -41,8 +41,7 @@ public class TaskManager {
 
     public void updateSubtask(ElementSubtask subtask) {
         subtasks.put(subtask.id, subtask);
-        int epicId = subtask.epicId;
-        ElementEpic epic = epics.get(epicId);
+        ElementEpic epic = epics.get(subtask.epicId);
         actualizeEpicStatus(epic);
     }
 
@@ -171,10 +170,6 @@ public class TaskManager {
     // *******************************************************
     // Вспомогательные методы
     // *******************************************************
-    public int getNextVal() {
-        return sequence++;
-    }
-
     public void actualizeEpicStatus(ElementEpic epic) {
         boolean isNew = true;
         boolean isDone = true;
@@ -196,5 +191,9 @@ public class TaskManager {
         } else {
             epic.setStatus(StatusTask.IN_PROGRESS);
         }
+    }
+
+    public int getNextVal() {
+        return sequence++;
     }
 }

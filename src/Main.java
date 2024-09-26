@@ -36,7 +36,6 @@ public class Main {
         taskManager.updateSubtask(subtask2);
 
         // Тестирование редактирования статусов
-        System.out.println();
         task1.status = StatusTask.IN_PROGRESS;
         taskManager.updateTask(task1);
         task2.status = StatusTask.DONE;

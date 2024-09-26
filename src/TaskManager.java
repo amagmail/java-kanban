@@ -182,6 +182,7 @@ public class TaskManager {
             } else {
                 isDone = false;
                 isNew = false;
+                break;
             }
         }
         if (isNew) {

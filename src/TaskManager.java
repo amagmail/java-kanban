@@ -24,8 +24,10 @@ public class TaskManager {
         subtask.id = getNextVal();
         subtasks.put(subtask.id, subtask);
 
-        Epic epic = epics.get(subtask.epicId);
-        epic.subtaskIds.add(subtask.id);
+        int epicId = subtask.getEpicId();
+        Epic epic = epics.get(epicId);
+        ArrayList<Integer> subtaskIds = epic.getSubtaskIds();
+        subtaskIds.add(subtask.id);
 
         actualizeEpicStatus(epic);
     }
@@ -43,7 +45,8 @@ public class TaskManager {
 
     public void updateSubtask(Subtask subtask) {
         subtasks.put(subtask.id, subtask);
-        Epic epic = epics.get(subtask.epicId);
+        int epicId = subtask.getEpicId();
+        Epic epic = epics.get(epicId);
         actualizeEpicStatus(epic);
     }
 
@@ -111,7 +114,8 @@ public class TaskManager {
             System.out.println("WARNING: Не удалось найти элемент типа Epic по идентификатору " + id);
             return items;
         }
-        for (Integer subtaskId : epic.subtaskIds) {
+        ArrayList<Integer> subtaskIds = epic.getSubtaskIds();
+        for (Integer subtaskId : subtaskIds) {
             items.add(subtasks.get(subtaskId));
         }
         return items;
@@ -132,7 +136,8 @@ public class TaskManager {
     public void removeSubtasks() {
         subtasks.clear();
         for (Epic epic : getEpics())  {
-            epic.subtaskIds.clear();
+            ArrayList<Integer> subtaskIds = epic.getSubtaskIds();
+            subtaskIds.clear();
         }
     }
 
@@ -149,7 +154,8 @@ public class TaskManager {
         if (epic == null) {
             return;
         }
-        for (Integer subtaskId : epic.subtaskIds) {
+        ArrayList<Integer> subtaskIds = epic.getSubtaskIds();
+        for (Integer subtaskId : subtaskIds) {
             subtasks.remove(subtaskId);
             System.out.println("Элемент типа Subtask c идентификатором " + subtaskId + " успешно удален");
         }
@@ -162,8 +168,9 @@ public class TaskManager {
         if (subtask == null) {
             return;
         }
-        Epic epic = epics.get(subtask.epicId);
-        ArrayList<Integer> subtaskIds = epics.get(epic.id).subtaskIds;
+        int epicId = subtask.getEpicId();
+        Epic epic = epics.get(epicId);
+        ArrayList<Integer> subtaskIds = epic.getSubtaskIds();
         subtaskIds.remove(Integer.valueOf(subtask.id));
         System.out.println("Элемент типа Epic c идентификатором " + epic.id + " успешно обновлен");
         subtasks.remove(subtask.id);
@@ -177,7 +184,8 @@ public class TaskManager {
     private void actualizeEpicStatus(Epic epic) {
         boolean isNew = true;
         boolean isDone = true;
-        for (Integer subtaskId : epic.subtaskIds) {
+        ArrayList<Integer> subtaskIds = epic.getSubtaskIds();
+        for (Integer subtaskId : subtaskIds) {
             Subtask otherSubtask = subtasks.get(subtaskId);
             if (isNew && otherSubtask.status == StatusTask.NEW) {
                 isDone = false;

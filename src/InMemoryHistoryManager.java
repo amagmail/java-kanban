@@ -1,9 +1,10 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    protected ArrayList<Task> history = new ArrayList<>();
-    protected final int HIST_ITEMS_COUNT = 10;
+    private final List<Task> history = new ArrayList<>();
+    private final int HIST_ITEMS_COUNT = 10;
 
     public void add(Task item) {
         history.add(item);
@@ -19,7 +20,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    public ArrayList<Task> getHistory() {
-        return history;
+    public List<Task> getHistory() {
+        // Возвращаем копию коллекции, чтобы нельзя было ее модернизировать
+        return new ArrayList<>(history);
     }
 }

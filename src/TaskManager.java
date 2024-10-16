@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
 
@@ -19,20 +19,21 @@ public interface TaskManager {
     // *******************************************************
     // Получение задач
     // *******************************************************
-    ArrayList<Task> getTasks();
-    ArrayList<Epic> getEpics();
-    ArrayList<Subtask> getSubtasks();
+    List<Task> getTasks();
+    List<Epic> getEpics();
+    List<Subtask> getSubtasks();
     Task getTaskByID(int id);
     Epic getEpicByID(int id);
     Subtask getSubtaskByID(int id);
-    ArrayList<Subtask> getEpicSubtasksByID(int id);
+    List<Subtask> getEpicSubtasksByID(int id);
+    List<Task> getHistory();
 
     // *******************************************************
     // Печать данных
     // *******************************************************
-    void printTasks(ArrayList<Task> tasksArr);
-    void printEpics(ArrayList<Epic> epicsArr);
-    void printSubtasks(ArrayList<Subtask> subtasksArr);
+    void printTasks();
+    void printEpics();
+    void printSubtasks();
 
     // *******************************************************
     // Удаление задач

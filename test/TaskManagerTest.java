@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskManagerTest {
 
@@ -27,24 +28,24 @@ public class TaskManagerTest {
         Task task2 = new Task("Базовая задача №2", "ОК-002");
         taskManager.addTask(task2);
 
-        Epic epic1 = new Epic("Эпик №1", "ОК-003");
-        taskManager.addEpic(epic1);
+        Epic epic3= new Epic("Эпик №3", "ОК-003");
+        taskManager.addEpic(epic3);
 
-        Epic epic2 = new Epic("Эпик №2", "ОК-004");
-        taskManager.addEpic(epic2);
+        Epic epic4 = new Epic("Эпик №4", "ОК-004");
+        taskManager.addEpic(epic4);
 
-        Subtask subtask1 = new Subtask("Подзадача №1", "ОК-005", epic1.id);
-        taskManager.addSubtask(subtask1);
+        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id);
+        taskManager.addSubtask(subtask5);
 
-        Subtask subtask2 = new Subtask("Подзадача №2", "ОК-006", epic1.id);
-        taskManager.addSubtask(subtask2);
+        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id);
+        taskManager.addSubtask(subtask6);
 
-        Subtask subtask3 = new Subtask("Подзадача №3", "ОК-007", epic2.id);
-        taskManager.addSubtask(subtask3);
+        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id);
+        taskManager.addSubtask(subtask7);
     }
 
     @Test
-    public void CheckUpdateDescription() {
+    public void checkUpdateDescription() {
         System.out.println(">> Изменить свойство задачи");
         Task task = taskManager.getTasks().getFirst();
         task.description = "MODIFIED-FIRST-ITEM";
@@ -53,7 +54,7 @@ public class TaskManagerTest {
     }
 
     @Test
-    public void CheckUpdateStatuses() {
+    public void checkUpdateStatuses() {
         System.out.println(">> Изменить статус задачи");
         Subtask subtask = taskManager.getSubtasks().getFirst();
         subtask.status = StatusTask.DONE;
@@ -62,17 +63,16 @@ public class TaskManagerTest {
     }
 
     @Test
-    public void CheckEpicSubtasks() {
+    public void checkEpicSubtasks() {
         System.out.println(">> Получить подзадачи эпика");
-        ArrayList<Integer> subtaskIds = taskManager.getEpicByID(3).getSubtaskIds();
-        ArrayList<Integer> checkIds = new ArrayList<>();
-        checkIds.add(5);
-        checkIds.add(6);
+        List<Integer> subtaskIds = taskManager.getEpicByID(4).getSubtaskIds();
+        List<Integer> checkIds = new ArrayList<>();
+        checkIds.add(7);
         Assertions.assertEquals(subtaskIds, checkIds, "Ошибка редактирования");
     }
 
     @Test
-    public void CheckRemoveEpic() {
+    public void checkRemoveEpic() {
         System.out.println(">> Удалить эпик и все его подзадачи");
         Assertions.assertNotNull(taskManager.getSubtaskByID(5), "Ошибка удаления");
         Assertions.assertNotNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
@@ -84,7 +84,7 @@ public class TaskManagerTest {
     }
 
     @Test
-    public void CheckRemoveSubtask() {
+    public void checkRemoveSubtask() {
         System.out.println(">> Удалить подзадачу и скорректировать свойство эпика");
         Assertions.assertNotNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
         Assertions.assertFalse(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");

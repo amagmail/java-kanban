@@ -1,4 +1,5 @@
 import java.util.Objects;
+
 public class Task {
 
     protected String title;

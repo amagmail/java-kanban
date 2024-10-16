@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -12,30 +14,30 @@ public class Main {
         Task task2 = new Task("Базовая задача №2", "ОК-002");
         taskManager.addTask(task2);
 
-        Epic epic1 = new Epic("Эпик №1", "ОК-003");
-        taskManager.addEpic(epic1);
+        Epic epic3 = new Epic("Эпик №3", "ОК-003");
+        taskManager.addEpic(epic3);
 
-        Epic epic2 = new Epic("Эпик №2", "ОК-004");
-        taskManager.addEpic(epic2);
+        Epic epic4 = new Epic("Эпик №4", "ОК-004");
+        taskManager.addEpic(epic4);
 
-        Subtask subtask1 = new Subtask("Подзадача №1", "ОК-005", epic1.id);
-        taskManager.addSubtask(subtask1);
+        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id);
+        taskManager.addSubtask(subtask5);
 
-        Subtask subtask2 = new Subtask("Подзадача №2", "ОК-006", epic1.id);
-        taskManager.addSubtask(subtask2);
+        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id);
+        taskManager.addSubtask(subtask6);
 
-        Subtask subtask3 = new Subtask("Подзадача №3", "ОК-007", epic2.id);
-        taskManager.addSubtask(subtask3);
+        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id);
+        taskManager.addSubtask(subtask7);
 
         // Тестирование редактирования свойств
         task2.description = "MODIFIED-002";
         taskManager.updateTask(task2);
 
-        epic2.description = "MODIFIED-004";
-        taskManager.updateEpic(epic2);
+        epic3.description = "MODIFIED-004";
+        taskManager.updateEpic(epic3);
 
-        subtask2.description = "MODIFIED-006";
-        taskManager.updateSubtask(subtask2);
+        subtask6.description = "MODIFIED-006";
+        taskManager.updateSubtask(subtask6);
 
         // Тестирование редактирования статусов
         task1.status = StatusTask.IN_PROGRESS;
@@ -44,15 +46,15 @@ public class Main {
         task2.status = StatusTask.DONE;
         taskManager.updateTask(task2);
 
-        subtask1.status = StatusTask.DONE;
-        taskManager.updateSubtask(subtask1);
+        subtask5.status = StatusTask.DONE;
+        taskManager.updateSubtask(subtask5);
 
         // Вывести на печать все задачи
         System.out.println();
         System.out.println(">> Вывести на печать все задачи");
-        taskManager.printTasks(taskManager.getTasks());
-        taskManager.printEpics(taskManager.getEpics());
-        taskManager.printSubtasks(taskManager.getSubtasks());
+        taskManager.printTasks();
+        taskManager.printEpics();
+        taskManager.printSubtasks();
 
         // Работа с задачами
         System.out.println();
@@ -60,7 +62,7 @@ public class Main {
         System.out.println(">> Результат поиска элемента типа Epic по идентификатору " + searchId);
         System.out.println(taskManager.getEpicByID(searchId));
         System.out.println(">> Получить список всех подзадач элемента типа Epic по идентификатору " + searchId);
-        taskManager.printSubtasks(taskManager.getEpicSubtasksByID(searchId));
+        taskManager.printSubtasks();
 
         System.out.println();
         searchId = 4;
@@ -79,11 +81,11 @@ public class Main {
         // Вывести на печать все оставшиеся задачи
         System.out.println();
         System.out.println(">> Вывести на печать все оставшиеся задачи");
-        taskManager.printTasks(taskManager.getTasks());
-        taskManager.printEpics(taskManager.getEpics());
-        taskManager.printSubtasks(taskManager.getSubtasks());
+        taskManager.printTasks();
+        taskManager.printEpics();
+        taskManager.printSubtasks();
 
-        // Получить историю просмотров задач
+        // Получить историю просмотра задач
         System.out.println();
         taskManager.getTaskByID(1);
         taskManager.getTaskByID(2);
@@ -97,15 +99,36 @@ public class Main {
         taskManager.getSubtaskByID(5);
         taskManager.getSubtaskByID(5);
         historyManager.printHistory();
+
+        List<Task> history = taskManager.getHistory();
+        System.out.println();
+        System.out.println(history);
+        history.removeFirst();
+        history.removeFirst();
+        history.removeFirst();
+        history.removeFirst();
+        history.removeFirst();
+        history.removeFirst();
+        history.removeFirst();
+        history.removeFirst();
+        history.removeFirst();
+        System.out.println(history);
+        history = taskManager.getHistory();
+        System.out.println(history);
+
+        // Тестовая утилита печати всех задач
+        printAllTasks(taskManager);
     }
 
-    private static void printAllTasks(TaskManager manager, HistoryManager history) {
+    private static void printAllTasks(TaskManager manager) {
 
+        System.out.println();
         System.out.println("Задачи:");
         for (Task task : manager.getTasks()) {
             System.out.println(task);
         }
 
+        System.out.println();
         System.out.println("Эпики:");
         for (Task epic : manager.getEpics()) {
             System.out.println(epic);
@@ -114,13 +137,15 @@ public class Main {
             }
         }
 
+        System.out.println();
         System.out.println("Подзадачи:");
         for (Task subtask : manager.getSubtasks()) {
             System.out.println(subtask);
         }
 
+        System.out.println();
         System.out.println("История:");
-        for (Task task : history.getHistory()) {
+        for (Task task : manager.getHistory()) {
             System.out.println(task);
         }
     }

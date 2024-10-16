@@ -25,20 +25,20 @@ public class HistoryManagerTest {
         Task task2 = new Task("Базовая задача №2", "ОК-002");
         taskManager.addTask(task2);
 
-        Epic epic1 = new Epic("Эпик №1", "ОК-003");
-        taskManager.addEpic(epic1);
+        Epic epic3 = new Epic("Эпик №3", "ОК-003");
+        taskManager.addEpic(epic3);
 
-        Epic epic2 = new Epic("Эпик №2", "ОК-004");
-        taskManager.addEpic(epic2);
+        Epic epic4 = new Epic("Эпик №4", "ОК-004");
+        taskManager.addEpic(epic4);
 
-        Subtask subtask1 = new Subtask("Подзадача №1", "ОК-005", epic1.id);
-        taskManager.addSubtask(subtask1);
+        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id);
+        taskManager.addSubtask(subtask5);
 
-        Subtask subtask2 = new Subtask("Подзадача №2", "ОК-006", epic1.id);
-        taskManager.addSubtask(subtask2);
+        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id);
+        taskManager.addSubtask(subtask6);
 
-        Subtask subtask3 = new Subtask("Подзадача №3", "ОК-007", epic2.id);
-        taskManager.addSubtask(subtask3);
+        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id);
+        taskManager.addSubtask(subtask7);
 
         // Сформировать историю просмотра задач
         taskManager.getTaskByID(2);
@@ -55,19 +55,19 @@ public class HistoryManagerTest {
     }
 
     @Test
-    public void CheckFirstItemHistory() {
+    public void checkFirstItemHistory() {
         System.out.println(">> Получить первый элемент истории");
         Assertions.assertEquals(historyManager.getHistory().getFirst(), taskManager.getEpicByID(3), "История просмотра задач отображается неверно");
     }
 
     @Test
-    public void CheckLastItemHistory() {
+    public void checkLastItemHistory() {
         System.out.println(">> Получить последний элемент истории");
         Assertions.assertEquals(historyManager.getHistory().getLast(), taskManager.getSubtaskByID(6), "История просмотра задач отображается неверно");
     }
 
     @Test
-    public void CheckTheNumberOfItems() {
+    public void checkTheNumberOfItems() {
         System.out.println(">> Получить количество элементов истории");
         Assertions.assertTrue(historyManager.getHistory().size() <= 10, "История просмотра задач отображается неверно");
     }

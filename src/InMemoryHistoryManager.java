@@ -40,12 +40,12 @@ public class InMemoryHistoryManager implements HistoryManager {
         return history.getTasks();
     }
 
-    private static class CustomList<Task> {
+    private static class CustomList<T> {
 
-        private Node<Task> head;
-        private Node<Task> tail;
+        private Node<T> head;
+        private Node<T> tail;
 
-        public void linkLast(Node<Task> newNode) {
+        public void linkLast(Node<T> newNode) {
             if (head == null) {
                 head = newNode;
                 tail = newNode;
@@ -59,9 +59,9 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
         }
 
-        public ArrayList<Task> getTasks() {
-            ArrayList<Task> tasks = new ArrayList<>();
-            Node<Task> curr = head;
+        public ArrayList<T> getTasks() {
+            ArrayList<T> tasks = new ArrayList<>();
+            Node<T> curr = head;
             if (head == null) {
                 System.out.println("Список пуст");
             } else {

@@ -8,8 +8,8 @@ import java.util.List;
 
 public class TaskManagerTest {
 
-    private static final HistoryManager historyManager = Managers.getDefaultHistory();
-    private static final TaskManager taskManager = Managers.getDefault(historyManager);
+    private static HistoryManager historyManager = Managers.getDefaultHistory();
+    private static TaskManager taskManager = Managers.getDefault(historyManager);
 
     @BeforeAll
     static void beforeAll() {
@@ -20,6 +20,9 @@ public class TaskManagerTest {
 
     @BeforeEach
     public void beforeEach() {
+
+        historyManager = Managers.getDefaultHistory();
+        taskManager = Managers.getDefault(historyManager);
 
         // Создать новые задачи всех типов
         Task task1 = new Task("Базовая задача №1", "ОК-001");

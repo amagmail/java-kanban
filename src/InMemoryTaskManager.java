@@ -21,18 +21,27 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addTask(Task task) {
+        if (task == null) {
+            return;
+        }
         task.id = getNextVal();
         tasks.put(task.id, task);
     }
 
     @Override
     public void addEpic(Epic epic) {
+        if (epic == null) {
+            return;
+        }
         epic.id = getNextVal();
         epics.put(epic.id, epic);
     }
 
     @Override
     public void addSubtask(Subtask subtask) {
+        if (subtask == null) {
+            return;
+        }
         subtask.id = getNextVal();
         subtasks.put(subtask.id, subtask);
 
@@ -139,31 +148,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     // *******************************************************
-    // Печать данных
-    // *******************************************************
-
-    @Override
-    public void printTasks() {
-        for (Task task : getTasks()) {
-            System.out.println(task);
-        }
-    }
-
-    @Override
-    public void printEpics() {
-        for (Epic epic : getEpics()) {
-            System.out.println(epic);
-        }
-    }
-
-    @Override
-    public void printSubtasks() {
-        for (Subtask subtask : getSubtasks()) {
-            System.out.println(subtask);
-        }
-    }
-
-    // *******************************************************
     // Удаление задач
     // *******************************************************
 
@@ -194,6 +178,7 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         tasks.remove(task.id);
+        historyManager.remove(task.id);
     }
 
     @Override
@@ -205,9 +190,11 @@ public class InMemoryTaskManager implements TaskManager {
         List<Integer> subtaskIds = epic.getSubtaskIds();
         for (Integer subtaskId : subtaskIds) {
             subtasks.remove(subtaskId);
+            historyManager.remove(subtaskId);
             System.out.println("Элемент типа Subtask c идентификатором " + subtaskId + " успешно удален");
         }
         epics.remove(epic.id);
+        historyManager.remove(epic.id);
         System.out.println("Элемент типа Epic c идентификатором " + epic.id + " успешно удален");
     }
 
@@ -223,6 +210,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtaskIds.remove(Integer.valueOf(subtask.id));
         System.out.println("Элемент типа Epic c идентификатором " + epic.id + " успешно обновлен");
         subtasks.remove(subtask.id);
+        historyManager.remove(subtask.id);
         System.out.println("Элемент типа Subtask c идентификатором " + subtask.id + " успешно удален");
         actualizeEpicStatus(epic);
     }
@@ -232,6 +220,9 @@ public class InMemoryTaskManager implements TaskManager {
     // *******************************************************
 
     private void actualizeEpicStatus(Epic epic) {
+        if (epic == null) {
+            return;
+        }
         boolean isNew = true;
         boolean isDone = true;
         List<Integer> subtaskIds = epic.getSubtaskIds();

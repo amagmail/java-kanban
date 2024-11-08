@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 
 public class HistoryManagerTest {
 
-    private static final HistoryManager historyManager = Managers.getDefaultHistory();
-    private static final TaskManager taskManager = Managers.getDefault(historyManager);
+    private static HistoryManager historyManager = Managers.getDefaultHistory();
+    private static TaskManager taskManager = Managers.getDefault(historyManager);
 
     @BeforeAll
     static void beforeAll() {
@@ -17,6 +17,9 @@ public class HistoryManagerTest {
 
     @BeforeEach
     public void beforeEach() {
+
+        historyManager = Managers.getDefaultHistory();
+        taskManager = Managers.getDefault(historyManager);
 
         // Создать новые задачи всех типов
         Task task1 = new Task("Базовая задача №1", "ОК-001");
@@ -46,30 +49,45 @@ public class HistoryManagerTest {
         taskManager.getSubtaskByID(6);
         taskManager.getSubtaskByID(6);
         taskManager.getSubtaskByID(6);
-        taskManager.getSubtaskByID(6);
-        taskManager.getSubtaskByID(6);
-        taskManager.getSubtaskByID(6);
-        taskManager.getSubtaskByID(6);
-        taskManager.getSubtaskByID(6);
-        taskManager.getSubtaskByID(6);
+        taskManager.getEpicByID(3);
     }
 
     @Test
     public void checkFirstItemHistory() {
-        System.out.println(">> Получить первый элемент истории");
-        Assertions.assertEquals(historyManager.getHistory().getFirst(), taskManager.getEpicByID(3), "История просмотра задач отображается неверно");
+        System.out.println(">> Получить первый элемент истории: id = " + historyManager.getHistory().getFirst().id);
+        printHistory();
+        Assertions.assertEquals(historyManager.getHistory().getFirst(), taskManager.getTaskByID(2), "История просмотра задач отображается неверно");
+        System.out.println();
     }
 
     @Test
     public void checkLastItemHistory() {
-        System.out.println(">> Получить последний элемент истории");
-        Assertions.assertEquals(historyManager.getHistory().getLast(), taskManager.getSubtaskByID(6), "История просмотра задач отображается неверно");
+        System.out.println(">> Получить последний элемент истории: id = " + historyManager.getHistory().getLast().id);
+        printHistory();
+        Assertions.assertEquals(historyManager.getHistory().getLast(), taskManager.getEpicByID(3), "История просмотра задач отображается неверно");
+        System.out.println();
     }
 
     @Test
     public void checkTheNumberOfItems() {
-        System.out.println(">> Получить количество элементов истории");
-        Assertions.assertTrue(historyManager.getHistory().size() <= 10, "История просмотра задач отображается неверно");
+        System.out.println(">> Получить количество элементов истории: size = " + historyManager.getHistory().size());
+        printHistory();
+        Assertions.assertEquals(historyManager.getHistory().size(), 3, "История просмотра задач отображается неверно");
+        System.out.println();
     }
 
+    @Test
+    public void checkTheNumberOfItemsAfterDelete() {
+        System.out.println(">> Получить количество элементов истории до и после удаления: sizeBebore = " + historyManager.getHistory().size());
+        taskManager.removeEpicByID(3);
+        System.out.println("sizeAfter = " + historyManager.getHistory().size());
+        Assertions.assertEquals(historyManager.getHistory().size(), 1, "История просмотра задач отображается неверно");
+        System.out.println();
+    }
+
+    private static void printHistory() {
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+    }
 }

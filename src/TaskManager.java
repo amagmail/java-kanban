@@ -6,7 +6,9 @@ public interface TaskManager {
     // Создание задач
     // *******************************************************
     void addTask(Task task);
+
     void addEpic(Epic epic);
+
     void addSubtask(Subtask subtask);
 
     // *******************************************************

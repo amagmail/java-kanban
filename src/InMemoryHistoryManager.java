@@ -1,38 +1,24 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
     private final CustomList<Task> history = new CustomList<>();
-    private final HashMap<Integer, Node<Task>> structure = new HashMap<>();
 
     public void add(Task data) {
         Node<Task> newNode = new Node<>(data);
-        if (structure.containsKey(data.id)) {
+        if (history.structure.containsKey(data.id)) {
             remove(data.id);
         }
         history.linkLast(newNode);
-        structure.put(data.id, newNode);
+        history.structure.put(data.id, newNode);
     }
 
     public void remove(int id) {
-        Node<Task> curr = structure.get(id);
-        if (curr == null) {
-            return;
-        }
-        Node<Task> currPrev = curr.prev;
-        Node<Task> currNext = curr.next;
-        if (currPrev != null) {
-            currPrev.next = curr.next;
-        } else {
-            history.head = currNext;
-        }
-        if (currNext != null) {
-            currNext.prev = curr.prev;
-        } else {
-            history.tail = currPrev;
-        }
+        Node<Task> node = history.structure.get(id);
+        history.removeNode(node);
     }
 
     public List<Task> getHistory() {
@@ -44,18 +30,19 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         private Node<T> head;
         private Node<T> tail;
+        private final Map<Integer, Node<Task>> structure = new HashMap<>();
 
         public void linkLast(Node<T> newNode) {
             if (head == null) {
                 head = newNode;
                 tail = newNode;
-                head.prev = null;
-                tail.next = null;
+                head.setPrev(null);
+                tail.setNext(null);
             } else {
-                tail.next = newNode;
-                newNode.prev = tail;
+                tail.setNext(newNode);
+                newNode.setPrev(tail);
                 tail = newNode;
-                tail.next = null;
+                tail.setNext(null);
             }
         }
 
@@ -66,11 +53,29 @@ public class InMemoryHistoryManager implements HistoryManager {
                 System.out.println("Список пуст");
             } else {
                 while (curr != null) {
-                    tasks.add(curr.data);
-                    curr = curr.next;
+                    tasks.add(curr.getData());
+                    curr = curr.getNext();
                 }
             }
             return tasks;
+        }
+
+        public void removeNode(Node<T> curr) {
+            if (curr == null) {
+                return;
+            }
+            Node<T> currPrev = curr.getPrev();
+            Node<T> currNext = curr.getNext();
+            if (currPrev != null) {
+                currPrev.setNext(curr.getNext());
+            } else {
+                head = currNext;
+            }
+            if (currNext != null) {
+                currNext.setPrev(curr.getPrev());
+            } else {
+                tail = currPrev;
+            }
         }
     }
 }

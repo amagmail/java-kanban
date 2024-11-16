@@ -5,7 +5,7 @@ public class Main {
         HistoryManager historyManager = Managers.getDefaultHistory();
         TaskManager taskManager = Managers.getDefault(historyManager);
 
-        // Создать новые задачи всех типов
+        // Создать новые задачи всех типов 14
         Task task1 = new Task("Базовая задача №1", "ОК-001");
         taskManager.addTask(task1);
 

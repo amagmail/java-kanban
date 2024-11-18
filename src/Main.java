@@ -2,10 +2,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        HistoryManager historyManager = Managers.getDefaultHistory();
-        TaskManager taskManager = Managers.getDefault(historyManager);
+        //HistoryManager historyManager = Managers.getDefaultHistory();
+        //TaskManager taskManager = Managers.getDefault(historyManager);
 
-        // Создать новые задачи всех типов 16
+        HistoryManager historyManager = Managers.getDefaultHistory();
+        TaskManager taskManager = Managers.getFileBackedTaskManager(historyManager, "D:/Projects/TmpFiles/file.csv");
+
+        // Создать новые задачи всех типов
         Task task1 = new Task("Базовая задача №1", "ОК-001");
         taskManager.addTask(task1);
 

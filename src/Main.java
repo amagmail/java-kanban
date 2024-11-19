@@ -2,9 +2,11 @@ public class Main {
 
     public static void main(String[] args) {
 
+        //1. InMemoryTaskManager
         //HistoryManager historyManager = Managers.getDefaultHistory();
         //TaskManager taskManager = Managers.getDefault(historyManager);
 
+        //2. FileBackedTaskManager
         HistoryManager historyManager = Managers.getDefaultHistory();
         TaskManager taskManager = Managers.getFileBackedTaskManager(historyManager, "D:/Projects/TmpFiles/file.csv");
 

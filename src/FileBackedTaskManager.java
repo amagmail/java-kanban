@@ -225,8 +225,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     static class ManagerSaveException extends Exception {
-        public ManagerSaveException() {
-        }
+        public ManagerSaveException() {}
         public ManagerSaveException(final String message) {
             super(message);
         }

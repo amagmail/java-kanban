@@ -3,14 +3,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.nio.file.Path;
 
-class ManagerSaveException extends Exception {
-    public ManagerSaveException() {
-    }
-    public ManagerSaveException(final String message) {
-        super(message);
-    }
-}
-
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public Path filePath;
@@ -209,8 +201,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
         } catch (ManagerSaveException e) {
             System.out.println(e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Невозможно создать объект из строки: " + line);
         }
     }
@@ -231,5 +222,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         epic.status = status;
         super.sequence = id - 1;
         super.addEpic(epic);
+    }
+
+    static class ManagerSaveException extends Exception {
+        public ManagerSaveException() {
+        }
+        public ManagerSaveException(final String message) {
+            super(message);
+        }
     }
 }

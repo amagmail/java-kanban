@@ -223,11 +223,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         super.sequence = id - 1;
         super.addEpic(epic);
     }
-
-    static class ManagerSaveException extends Exception {
-        public ManagerSaveException() {}
-        public ManagerSaveException(final String message) {
-            super(message);
-        }
-    }
 }

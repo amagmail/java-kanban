@@ -172,7 +172,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
                 dataId = Integer.parseInt(d1);
                 if (dataId <= 0) {
-                    throw new ManagerSaveException("Идентификатор объекта не может быь отрицательным: " + line);
+                    throw new ManagerSaveException("Идентификатор объекта не может быть отрицательным: " + line);
                 }
                 if (d2.equals("null") || d2.isBlank()) {
                     throw new ManagerSaveException("Тип объекта не может быть пустым: " + line);

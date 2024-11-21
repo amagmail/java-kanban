@@ -121,14 +121,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 fileWriter.write(line);
             }
         } catch (Exception e) {
-            System.out.println("Произошла ошибка во время записи файла");
+            throw new ManagerSaveException("Произошла ошибка во время записи файла");
         }
     }
 
-    private String toString(Task task) throws ManagerSaveException {
+    private String toString(Task task) {
         TaskTypes taskType;
         try {
-            taskType = TaskTypes.valueOf(task.getClass().getName().toUpperCase());
+            taskType = TaskTypes.valueOf(task.getClass().getName());
         } catch (Exception e) {
             taskType = null;
         }
@@ -150,7 +150,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 cnt++;
             }
         } catch (Exception e) {
-            System.out.println("Произошла ошибка во время чтения файла");
+            throw new ManagerSaveException("Произошла ошибка во время чтения файла");
         }
         return cnt;
     }
@@ -199,10 +199,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             } else {
                 throw new ManagerSaveException("В строке неверное число столбцов: " + line);
             }
-        } catch (ManagerSaveException e) {
-            System.out.println(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Невозможно создать объект из строки: " + line);
+            throw new ManagerSaveException("Невозможно создать объект из строки: " + line);
         }
     }
 
@@ -224,13 +222,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         super.addEpic(epic);
     }
 
-    public static class ManagerSaveException extends Exception {
-
-        public ManagerSaveException() {
-        }
-
-        public ManagerSaveException(final String message) {
-            super(message);
-        }
-    }
 }

@@ -128,7 +128,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private String toString(Task task) {
         TaskTypes taskType;
         try {
-            taskType = TaskTypes.valueOf(task.getClass().getName());
+            taskType = TaskTypes.valueOf(task.getClass().getName().toUpperCase());
         } catch (Exception e) {
             taskType = null;
         }

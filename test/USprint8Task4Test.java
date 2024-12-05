@@ -40,7 +40,6 @@ public class USprint8Task4Test {
         assertThrows(ManagerSaveException.class, () -> {
             Task task3 = new Task("Базовая задача №3", "ОК-003", 30, "2024-12-01 22:00");
             taskManager.addTask(task3);
-            //throw new ManagerSaveException("Произошла ошибка во время чтения файла");
         }, "Не удалось перехватить исключение");
     }
 }

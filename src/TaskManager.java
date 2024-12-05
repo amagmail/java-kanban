@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -38,6 +39,8 @@ public interface TaskManager {
     List<Subtask> getEpicSubtasksByID(int id);
 
     List<Task> getHistory();
+
+    Set<Task> getPrioritizedTasks();
 
     // *******************************************************
     // Удаление задач

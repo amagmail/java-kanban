@@ -103,7 +103,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (FileWriter fileWriter = new FileWriter(filePath.toFile())) {
-            String line = "id,type,name,status,description,epic" + "\n";
+            String line = "id,type,name,status,description,epic,duration,startTime" + "\n";
             fileWriter.write(line);
             for (Task task : getTasks()) {
                 line = toString(task);
@@ -121,6 +121,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 fileWriter.write(line);
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new ManagerSaveException("Произошла ошибка во время записи файла");
         }
     }
@@ -136,7 +137,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         if (taskType == TaskTypes.SUBTASK) {
             parentId = subtasks.get(task.id).getEpicId();
         }
-        return String.format("%d,%s,%s,%s,%s,%d", task.id, taskType, task.title, task.status, task.description, parentId);
+        Integer durMin = null;
+        if (task.duration != null) {
+            durMin = (int) task.duration.toMinutes();
+        }
+        String startTime = null;
+        if (task.startTime != null) {
+            startTime = task.startTime.format(task.DATE_TIME_FORMATTER);
+        }
+        return String.format("%d,%s,%s,%s,%s,%d,%d,%s", task.id, taskType, task.title, task.status, task.description, parentId, durMin, startTime);
     }
 
     private int loadFromFile() {
@@ -150,6 +159,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 cnt++;
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new ManagerSaveException("Произошла ошибка во время чтения файла");
         }
         return cnt;
@@ -158,7 +168,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private void restoreTaskFromString(String line) {
         try {
             String[] data = line.split(",");
-            if (data.length == 6) {
+            if (data.length == 8) {
                 int dataId, parentId;
                 TaskTypes taskType;
                 StatusTask taskStatus;
@@ -169,6 +179,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 String d4 = data[3].trim(); // status
                 String d5 = data[4].trim(); // description
                 String d6 = data[5].trim(); // parent
+                String d7 = data[6].trim(); // duration
+                String d8 = data[7].trim(); // startTime
 
                 dataId = Integer.parseInt(d1);
                 if (dataId <= 0) {
@@ -184,14 +196,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 taskStatus = StatusTask.valueOf(d4);
 
                 if (taskType == TaskTypes.TASK) {
-                    Task task = new Task(d3, d5);
+                    Task task;
+                    if (!d7.equals("null") && !d8.equals("null")) {
+                        task = new Task(d3, d5, Integer.parseInt(d7), d8);
+                    } else {
+                        task = new Task(d3, d5);
+                    }
                     restoreTask(task, dataId, taskStatus);
                 } else if (taskType == TaskTypes.EPIC) {
                     Epic epic = new Epic(d3, d5);
                     restoreEpic(epic, dataId, taskStatus);
                 } else if (taskType == TaskTypes.SUBTASK) {
                     parentId = Integer.parseInt(d6);
-                    Subtask subtask = new Subtask(d3, d5, parentId);
+                    Subtask subtask;
+                    if (!d7.equals("null") && !d8.equals("null")) {
+                        subtask = new Subtask(d3, d5, parentId, Integer.parseInt(d7), d8);
+                    } else {
+                        subtask = new Subtask(d3, d5, parentId);
+                    }
                     restoreSubtask(subtask, dataId, taskStatus);
                 } else {
                     throw new ManagerSaveException("Не удалось идентифицировать тип объекта: " + line);

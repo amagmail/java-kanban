@@ -7,11 +7,19 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
+    public Subtask(String title, String description, int epicId, int minutes, String date) {
+        super(title, description, minutes, date);
+        this.epicId = epicId;
+    }
+
     @Override
     public String toString() {
         String result = "Subtask{";
         result += "id=" + id + ",title='" + title + "',description='" + description + ",epic=" + epicId;
         result += "}, status=" + status;
+        if (duration != null && startTime != null) {
+            result +=  ", duration=[" + startTime.format(DATE_TIME_FORMATTER) + ", " + getEndTime().format(DATE_TIME_FORMATTER) + "]";
+        }
         return result;
     }
 

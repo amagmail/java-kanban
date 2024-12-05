@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 public class USprint8Task4Test {
 
     private static TaskManager taskManager;
+    public final boolean isFileBacked = false;
 
     @BeforeAll
     static void beforeAll() {
@@ -16,7 +17,11 @@ public class USprint8Task4Test {
     public void beforeEach() {
 
         HistoryManager historyManager = Managers.getDefaultHistory();
-        taskManager = Managers.getFileBackedTaskManager(historyManager, "file.csv");
+        if (isFileBacked) {
+            taskManager = Managers.getFileBackedTaskManager(historyManager, "D:/Projects/TmpFiles/file.csv");
+        } else {
+            taskManager = Managers.getDefault(historyManager);
+        }
 
         Task task1 = new Task("Базовая задача №1", "ОК-001", 30, "2024-12-01 20:00");
         taskManager.addTask(task1);

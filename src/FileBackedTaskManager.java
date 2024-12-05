@@ -143,7 +143,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         String startTime = null;
         if (task.startTime != null) {
-            startTime = task.startTime.format(task.DATE_TIME_FORMATTER);
+            startTime = task.startTime.format(task.dateTimeFormatter);
         }
         return String.format("%d,%s,%s,%s,%s,%d,%d,%s", task.id, taskType, task.title, task.status, task.description, parentId, durMin, startTime);
     }

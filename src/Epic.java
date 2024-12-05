@@ -26,7 +26,7 @@ public class Epic extends Task {
         result += "id=" + id + ",title='" + title + "',description='" + description + ",subtasks=" + subtaskIds.toString();
         result += "}, status=" + getStatus();
         if (duration != null && startTime != null) {
-            result +=  ", duration=[" + startTime.format(DATE_TIME_FORMATTER) + ", " + getEndTime().format(DATE_TIME_FORMATTER) + "]";
+            result +=  ", duration=[" + startTime.format(dateTimeFormatter) + ", " + getEndTime().format(dateTimeFormatter) + "]";
         }
         return result;
     }

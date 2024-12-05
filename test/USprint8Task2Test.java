@@ -2,24 +2,29 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
 
 public class USprint8Task2Test {
 
-    private static HistoryManager historyManager = Managers.getDefaultHistory();
-    private static TaskManager taskManager = Managers.getDefault(historyManager);
+    private static TaskManager taskManager;
+    public final boolean isFileBacked = false;
 
     @BeforeAll
     static void beforeAll() {
-        System.out.println("-------------------------------");
-        System.out.println("Тестирование №2. Менеджер задач");
-        System.out.println("-------------------------------");
+        System.out.println("--------------------------------");
+        System.out.println("Тестирование №2. Менеджеры задач");
+        System.out.println("--------------------------------");
     }
 
     @BeforeEach
     public void beforeEach() {
 
-        historyManager = Managers.getDefaultHistory();
-        taskManager = Managers.getDefault(historyManager);
+        HistoryManager historyManager = Managers.getDefaultHistory();
+        if (isFileBacked) {
+            taskManager = Managers.getFileBackedTaskManager(historyManager, "D:/Projects/TmpFiles/file.csv");
+        } else {
+            taskManager = Managers.getDefault(historyManager);
+        }
 
         Task task1 = new Task("Базовая задача №1", "ОК-001", 30, "2024-12-01 20:00");
         taskManager.addTask(task1);
@@ -41,9 +46,13 @@ public class USprint8Task2Test {
 
         Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id, 10, "2024-12-01 23:00");
         taskManager.addSubtask(subtask7);
+    }
 
-        Subtask subtask8 = new Subtask("Подзадача №8", "ОК-008", epic4.id, 10, "2024-12-01 23:05");
-        taskManager.addSubtask(subtask8);
+    @AfterEach
+    public void afterEach(){
+        taskManager.removeTasks();
+        taskManager.removeSubtasks();
+        taskManager.removeEpics();
     }
 
     @Test
@@ -83,9 +92,45 @@ public class USprint8Task2Test {
     @Test
     public void checkValidationProcess() {
         System.out.println(">> Проверка пересечение интервалов");
-        Subtask subtask8 = taskManager.getSubtaskByID(8);
-        Assertions.assertNull(subtask8, "Ошибка проверки пересечения интервалов");
+        Subtask subtask8 = new Subtask("Подзадача №8", "ОК-008", 4, 10, "2024-12-01 23:05");
+        taskManager.addSubtask(subtask8);
+        Assertions.assertNull(taskManager.getSubtaskByID(8), "Ошибка проверки пересечения интервалов");
         System.out.println("Валидатор отсек попытку создания подзадачи с идентификатором 8");
+        System.out.println();
+    }
+
+    @Test
+    public void checkUpdateDescription() {
+        System.out.println(">> Изменить свойства задачи");
+        Task task = taskManager.getTasks().getFirst();
+        task.description = "MODIFIED-FIRST-ITEM";
+        taskManager.updateTask(task);
+        Assertions.assertEquals(task.description, "MODIFIED-FIRST-ITEM", "Ошибка редактирования");
+        System.out.println("Свойства задачи успешно изменены");
+        System.out.println();
+    }
+
+    @Test
+    public void checkRemoveEpic() {
+        System.out.println(">> Удалить эпик и все его подзадачи");
+        Assertions.assertNotNull(taskManager.getSubtaskByID(5), "Ошибка удаления");
+        Assertions.assertNotNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
+        Assertions.assertNotNull(taskManager.getEpicByID(3), "Ошибка удаления");
+        taskManager.removeEpicByID(3);
+        Assertions.assertNull(taskManager.getSubtaskByID(5), "Ошибка удаления");
+        Assertions.assertNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
+        Assertions.assertNull(taskManager.getEpicByID(3), "Ошибка удаления");
+        System.out.println();
+    }
+
+    @Test
+    public void checkRemoveSubtask() {
+        System.out.println(">> Удалить подзадачу и скорректировать свойство эпика");
+        Assertions.assertNotNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
+        Assertions.assertFalse(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");
+        taskManager.removeSubtaskByID(7);
+        Assertions.assertNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
+        Assertions.assertTrue(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");
         System.out.println();
     }
 

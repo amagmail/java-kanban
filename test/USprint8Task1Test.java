@@ -2,23 +2,23 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
 
 public class USprint8Task1Test {
 
-    private static HistoryManager historyManager = Managers.getDefaultHistory();
-    private static TaskManager taskManager = Managers.getDefault(historyManager);
+    private static TaskManager taskManager;
 
     @BeforeAll
     static void beforeAll() {
-        System.out.println("------------------------------------");
-        System.out.println("Тестирование №1. Расчет статуса Epic");
-        System.out.println("------------------------------------");
+        System.out.println("-------------------------------------");
+        System.out.println("Тестирование №1. Расчет эпик статусов");
+        System.out.println("-------------------------------------");
     }
 
     @BeforeEach
     public void beforeEach() {
 
-        historyManager = Managers.getDefaultHistory();
+        HistoryManager historyManager = Managers.getDefaultHistory();
         taskManager = Managers.getDefault(historyManager);
 
         Epic epic1= new Epic("Эпик №1", "ОК-001");
@@ -34,16 +34,23 @@ public class USprint8Task1Test {
         taskManager.addSubtask(subtask4);
     }
 
+    @AfterEach
+    public void afterEach(){
+        taskManager.removeTasks();
+        taskManager.removeSubtasks();
+        taskManager.removeEpics();
+    }
+
     @Test
     public void checkSubtasksNew() {
-        System.out.println(">> Все подзадачи со статусом NEW");
+        System.out.println(">> Все подзадачи эпика со статусом NEW");
         Epic epic1 = taskManager.getEpicByID(1);
         Assertions.assertEquals(epic1.status, StatusTask.NEW, "Ошибка статуса");
     }
 
     @Test
     public void checkSubtasksDone() {
-        System.out.println(">> Все подзадачи со статусом DONE");
+        System.out.println(">> Все подзадачи эпика со статусом DONE");
 
         Subtask subtask2 = taskManager.getSubtaskByID(2);
         subtask2.status = StatusTask.DONE;
@@ -63,7 +70,7 @@ public class USprint8Task1Test {
 
     @Test
     public void checkSubtasksNewAndDone() {
-        System.out.println(">> Подзадачи со статусом NEW и DONE");
+        System.out.println(">> Подзадачи эпика со статусом NEW и DONE");
 
         Subtask subtask2 = taskManager.getSubtaskByID(2);
         subtask2.status = StatusTask.DONE;
@@ -75,7 +82,7 @@ public class USprint8Task1Test {
 
     @Test
     public void checkSubtasksInProgress() {
-        System.out.println(">> Подзадачи со статусом IN_PROGRESS");
+        System.out.println(">> Подзадачи эпика со статусом IN_PROGRESS");
 
         Subtask subtask2 = taskManager.getSubtaskByID(2);
         subtask2.status = StatusTask.IN_PROGRESS;

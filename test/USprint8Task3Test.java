@@ -1,12 +1,13 @@
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
 
 public class USprint8Task3Test {
 
-    private static HistoryManager historyManager = Managers.getDefaultHistory();
-    private static TaskManager taskManager = Managers.getDefault(historyManager);
+    private static HistoryManager historyManager;
+    private static TaskManager taskManager;
 
     @BeforeAll
     static void beforeAll() {
@@ -49,6 +50,13 @@ public class USprint8Task3Test {
         taskManager.getSubtaskByID(6);
         taskManager.getSubtaskByID(6);
         taskManager.getEpicByID(3);
+    }
+
+    @AfterEach
+    public void afterEach(){
+        taskManager.removeTasks();
+        taskManager.removeSubtasks();
+        taskManager.removeEpics();
     }
 
     @Test

@@ -1,7 +1,8 @@
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.AfterEach;
 
 public class USprint8Task4Test {
 
@@ -26,6 +27,13 @@ public class USprint8Task4Test {
 
         Task task2 = new Task("Базовая задача №2", "ОК-002", 30, "2024-12-01 22:00");
         taskManager.addTask(task2);
+    }
+
+    @AfterEach
+    public void afterEach(){
+        taskManager.removeTasks();
+        taskManager.removeSubtasks();
+        taskManager.removeEpics();
     }
 
     @Test

@@ -37,12 +37,11 @@ public class USprint8Task4Test {
         taskManager.removeEpics();
     }
 
-    /*
     @Test
     public void checkExceptionCatching() {
         Assertions.assertDoesNotThrow(() -> {
             Task task3 = new Task("Базовая задача №3", "ОК-003", 30, "2024-12-01 22:00");
             taskManager.addTask(task3);
         }, "Обнаружено исключение");
-    } */
+    }
 }

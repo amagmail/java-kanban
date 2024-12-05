@@ -10,9 +10,9 @@ public class USprint8Task1Test {
 
     @BeforeAll
     static void beforeAll() {
-        System.out.println("-------------------------------------");
-        System.out.println("Тестирование №1. Расчет эпик статусов");
-        System.out.println("-------------------------------------");
+        System.out.println("----------------------------------");
+        System.out.println("Тестирование №1. Проверка статусов");
+        System.out.println("----------------------------------");
     }
 
     @BeforeEach

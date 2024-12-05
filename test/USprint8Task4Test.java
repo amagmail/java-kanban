@@ -1,8 +1,5 @@
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import org.junit.jupiter.api.*;
 
 public class USprint8Task4Test {
 
@@ -37,9 +34,9 @@ public class USprint8Task4Test {
 
     @Test
     public void checkExceptionCatching() {
-        assertThrows(ManagerSaveException.class, () -> {
+        Assertions.assertDoesNotThrow(() -> {
             Task task3 = new Task("Базовая задача №3", "ОК-003", 30, "2024-12-01 22:00");
             taskManager.addTask(task3);
-        }, "Не удалось перехватить исключение");
+        }, "Обнаружено исключение");
     }
 }

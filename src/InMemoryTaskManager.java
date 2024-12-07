@@ -20,15 +20,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         Comparator<Task> comparator = (t1, t2) -> {
-            int compareVal = 0;
+            if (t1.id == t2.id) {
+                return 0;
+            }
             if (t1.startTime != null && t2.startTime != null) {
                 if (t1.startTime.isBefore(t2.startTime)) {
-                    compareVal = -1;
+                    return -1;
                 } else {
-                    compareVal = 1;
+                    return 1;
                 }
             }
-            return compareVal;
+            return 0;
         };
         this.prioritizedTasks = new TreeSet<>(comparator);
         this.historyManager = historyManager;
@@ -221,6 +223,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (task == null) {
             return;
         }
+        prioritizedTasks.remove(task);
         tasks.remove(task.id);
         historyManager.remove(task.id);
     }
@@ -247,6 +250,7 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         epic.getSubtaskIds().forEach(subtaskId -> {
+            prioritizedTasks.remove(getSubtaskByID(subtaskId));
             subtasks.remove(subtaskId);
             historyManager.remove(subtaskId);
             System.out.println("Элемент типа Subtask c идентификатором " + subtaskId + " успешно удален");
@@ -268,6 +272,7 @@ public class InMemoryTaskManager implements TaskManager {
         List<Integer> subtaskIds = epic.getSubtaskIds();
         subtaskIds.remove(Integer.valueOf(subtask.id));
         System.out.println("Элемент типа Epic c идентификатором " + epic.id + " успешно обновлен");
+        prioritizedTasks.remove(subtask);
         subtasks.remove(subtask.id);
         historyManager.remove(subtask.id);
         System.out.println("Элемент типа Subtask c идентификатором " + subtask.id + " успешно удален");

@@ -16,8 +16,21 @@ public class InMemoryTaskManager implements TaskManager {
     public int sequence = 0;
 
     public HistoryManager historyManager;
+    public Set<Task> prioritizedTasks;
 
     public InMemoryTaskManager(HistoryManager historyManager) {
+        Comparator<Task> comparator = (t1, t2) -> {
+            int compareVal = 0;
+            if (t1.startTime != null && t2.startTime != null) {
+                if (t1.startTime.isBefore(t2.startTime)) {
+                    compareVal = -1;
+                } else {
+                    compareVal = 1;
+                }
+            }
+            return compareVal;
+        };
+        this.prioritizedTasks = new TreeSet<>(comparator);
         this.historyManager = historyManager;
     }
 
@@ -36,6 +49,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
         task.id = getNextVal();
         tasks.put(task.id, task);
+        if (task.startTime != null) {
+            prioritizedTasks.add(task);
+        }
     }
 
     @Override
@@ -58,6 +74,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
         subtask.id = getNextVal();
         subtasks.put(subtask.id, subtask);
+        if (subtask.startTime != null) {
+            prioritizedTasks.add(subtask);
+        }
 
         int epicId = subtask.getEpicId();
         Epic epic = epics.get(epicId);
@@ -311,35 +330,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public Set<Task> getPrioritizedTasks() {
-
-        Comparator<Task> comparator = (t1, t2) -> {
-            int compareVal = 0;
-            if (t1.startTime != null && t2.startTime != null) {
-                if (t1.startTime.isBefore(t2.startTime)) {
-                    compareVal = -1;
-                } else {
-                    compareVal = 1;
-                }
-            }
-            return compareVal;
-        };
-        Set<Task> treeSet = new TreeSet<>(comparator);
-
-        for (Task task : getTasks()) {
-            if (task.startTime != null) {
-                treeSet.add(task);
-            }
-        }
-        for (Task subtask : getSubtasks()) {
-            if (subtask.startTime != null) {
-                treeSet.add(subtask);
-            }
-        }
-        return treeSet;
+        return prioritizedTasks;
     }
 
     public boolean isValid(Task task) {
-        return getPrioritizedTasks().stream()
+        return prioritizedTasks.stream()
                 .noneMatch(priorTask -> ((task.startTime.isAfter(priorTask.startTime) && task.startTime.isBefore(priorTask.getEndTime())))
                         || (task.getEndTime().isAfter(priorTask.startTime) && task.getEndTime().isBefore(priorTask.getEndTime()))
                 );

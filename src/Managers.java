@@ -28,6 +28,7 @@ public class Managers {
     }
 
     public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     public static LocalDateTime stringToDate(String date) {
         try {
             return LocalDateTime.parse(date, dateTimeFormatter);

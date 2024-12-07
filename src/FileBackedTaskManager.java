@@ -143,7 +143,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         String startTime = null;
         if (task.startTime != null) {
-            startTime = task.startTime.format(task.dateTimeFormatter);
+            startTime = task.startTime.format(Managers.dateTimeFormatter);
         }
         return String.format("%d,%s,%s,%s,%s,%d,%d,%s", task.id, taskType, task.title, task.status, task.description, parentId, durMin, startTime);
     }
@@ -198,7 +198,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 if (taskType == TaskTypes.TASK) {
                     Task task;
                     if (!d7.equals("null") && !d8.equals("null")) {
-                        task = new Task(d3, d5, Integer.parseInt(d7), d8);
+                        task = new Task(d3, d5, Integer.parseInt(d7), Managers.stringToDate(d8));
                     } else {
                         task = new Task(d3, d5);
                     }
@@ -210,7 +210,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     parentId = Integer.parseInt(d6);
                     Subtask subtask;
                     if (!d7.equals("null") && !d8.equals("null")) {
-                        subtask = new Subtask(d3, d5, parentId, Integer.parseInt(d7), d8);
+                        subtask = new Subtask(d3, d5, parentId, Integer.parseInt(d7), Managers.stringToDate(d8));
                     } else {
                         subtask = new Subtask(d3, d5, parentId);
                     }

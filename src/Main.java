@@ -11,10 +11,10 @@ public class Main {
         //TaskManager taskManager = Managers.getFileBackedTaskManager(historyManager, "D:/Projects/TmpFiles/file.csv");
 
         // Создать новые задачи всех типов
-        Task task1 = new Task("Базовая задача №1", "ОК-001", 30, "2024-12-01 20:00");
+        Task task1 = new Task("Базовая задача №1", "ОК-001", 30, Managers.stringToDate("2024-12-01 20:00"));
         taskManager.addTask(task1);
 
-        Task task2 = new Task("Базовая задача №2", "ОК-002", 30, "2024-12-01 20:30");
+        Task task2 = new Task("Базовая задача №2", "ОК-002", 30, Managers.stringToDate("2024-12-01 20:30"));
         taskManager.addTask(task2);
 
         Epic epic3 = new Epic("Эпик №3", "ОК-003");
@@ -23,13 +23,13 @@ public class Main {
         Epic epic4 = new Epic("Эпик №4", "ОК-004");
         taskManager.addEpic(epic4);
 
-        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id, 10, "2024-12-01 21:00");
+        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id, 10, Managers.stringToDate("2024-12-01 21:00"));
         taskManager.addSubtask(subtask5);
 
-        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id, 10, "2024-12-01 22:00");
+        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id, 10, Managers.stringToDate("2024-12-01 22:00"));
         taskManager.addSubtask(subtask6);
 
-        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id, 10, "2024-12-01 23:00");
+        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id, 10, Managers.stringToDate("2024-12-01 23:00"));
         taskManager.addSubtask(subtask7);
 
         // Тестирование редактирования свойств

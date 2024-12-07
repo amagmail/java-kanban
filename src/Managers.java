@@ -1,6 +1,8 @@
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Managers {
 
@@ -23,6 +25,16 @@ public class Managers {
             System.out.println(e.getMessage());
         }
         return new FileBackedTaskManager(historyManager, filePath);
+    }
+
+    public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    public static LocalDateTime stringToDate(String date) {
+        try {
+            return LocalDateTime.parse(date, dateTimeFormatter);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return LocalDateTime.now();
+        }
     }
 
 }

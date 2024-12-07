@@ -1,5 +1,8 @@
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
 
 public class USprint8Task4Test {
 
@@ -23,10 +26,10 @@ public class USprint8Task4Test {
             taskManager = Managers.getDefault(historyManager);
         }
 
-        Task task1 = new Task("Базовая задача №1", "ОК-001", 30, "2024-12-01 20:00");
+        Task task1 = new Task("Базовая задача №1", "ОК-001", 30, Managers.stringToDate("2024-12-01 20:00"));
         taskManager.addTask(task1);
 
-        Task task2 = new Task("Базовая задача №2", "ОК-002", 30, "2024-12-01 21:00");
+        Task task2 = new Task("Базовая задача №2", "ОК-002", 30, Managers.stringToDate("2024-12-01 21:00"));
         taskManager.addTask(task2);
     }
 
@@ -40,7 +43,7 @@ public class USprint8Task4Test {
     @Test
     public void checkExceptionCatching() {
         Assertions.assertDoesNotThrow(() -> {
-            Task task3 = new Task("Базовая задача №3", "ОК-003", 30, "2024-12-01 22:00");
+            Task task3 = new Task("Базовая задача №3", "ОК-003", 30, Managers.stringToDate("2024-12-01 22:00"));
             taskManager.addTask(task3);
         }, "Обнаружено исключение");
     }

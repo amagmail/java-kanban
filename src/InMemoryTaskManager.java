@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.util.TreeSet;
 import java.util.Set;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -157,9 +158,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
         return items; */
 
-        List<Subtask> items = new ArrayList<>();
-        getEpicByID(id).getSubtaskIds().forEach(subtaskId -> items.add(subtasks.get(subtaskId)));
-        return items;
+        return getEpicByID(id).getSubtaskIds().stream()
+                .map(subtaskId -> subtasks.get(subtaskId))
+                .collect(Collectors.toList());
     }
 
     @Override

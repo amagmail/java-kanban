@@ -1,9 +1,11 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
 
     private List<Integer> subtaskIds = new ArrayList<>();
+    protected LocalDateTime endTime;
 
     public Epic(String title, String description) {
         super(title, description);
@@ -23,6 +25,9 @@ public class Epic extends Task {
         String result = "Epic{";
         result += "id=" + id + ",title='" + title + "',description='" + description + ",subtasks=" + subtaskIds.toString();
         result += "}, status=" + getStatus();
+        if (duration != null && startTime != null) {
+            result +=  ", duration=[" + startTime.format(printFormat) + ", " + getEndTime().format(printFormat) + "]";
+        }
         return result;
     }
 

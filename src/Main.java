@@ -2,8 +2,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //Спринт 9
-
         //1. InMemoryTaskManager
         HistoryManager historyManager = Managers.getDefaultHistory();
         TaskManager taskManager = Managers.getDefault(historyManager);

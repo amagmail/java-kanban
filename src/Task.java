@@ -1,7 +1,6 @@
 import java.util.Objects;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Task {
 
@@ -11,8 +10,6 @@ public class Task {
     protected StatusTask status;
     protected Duration duration;
     protected LocalDateTime startTime;
-
-    public final DateTimeFormatter printFormat = Managers.dateTimeFormatter;
 
     public Task(String title, String description) {
         this.title = title;
@@ -38,7 +35,7 @@ public class Task {
         result += "id=" + id + ",title='" + title + "',description='" + description;
         result += "}, status=" + status;
         if (duration != null && startTime != null) {
-            result +=  ", duration=[" + startTime.format(printFormat) + ", " + getEndTime().format(printFormat) + "]";
+            result +=  ", duration=[" + startTime.format(Managers.dateTimeFormatter) + ", " + getEndTime().format(Managers.dateTimeFormatter) + "]";
         }
         return result;
     }

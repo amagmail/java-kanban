@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class TaskManagerTest {
 
@@ -81,9 +82,15 @@ public class TaskManagerTest {
         Assertions.assertNotNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
         Assertions.assertNotNull(taskManager.getEpicByID(3), "Ошибка удаления");
         taskManager.removeEpicByID(3);
-        Assertions.assertNull(taskManager.getSubtaskByID(5), "Ошибка удаления");
-        Assertions.assertNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
-        Assertions.assertNull(taskManager.getEpicByID(3), "Ошибка удаления");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(5);
+        }, "Не удалось поймать исключение");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(6);
+        }, "Не удалось поймать исключение");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getEpicByID(3);
+        }, "Не удалось поймать исключение");
     }
 
     @Test
@@ -92,8 +99,10 @@ public class TaskManagerTest {
         Assertions.assertNotNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
         Assertions.assertFalse(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");
         taskManager.removeSubtaskByID(7);
-        Assertions.assertNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
-        Assertions.assertTrue(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(7);
+        }, "Не удалось поймать исключение");
+        Assertions.assertNotNull(taskManager.getEpicByID(4), "Ошибка удаления");
     }
 
 }

@@ -20,7 +20,7 @@ public class Subtask extends Task {
         result += "id=" + id + ",title='" + title + "',description='" + description + ",epic=" + epicId;
         result += "}, status=" + status;
         if (duration != null && startTime != null) {
-            result +=  ", duration=[" + startTime.format(printFormat) + ", " + getEndTime().format(printFormat) + "]";
+            result +=  ", duration=[" + startTime.format(Managers.dateTimeFormatter) + ", " + getEndTime().format(Managers.dateTimeFormatter) + "]";
         }
         return result;
     }

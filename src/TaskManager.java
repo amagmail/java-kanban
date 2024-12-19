@@ -42,6 +42,8 @@ public interface TaskManager {
 
     Set<Task> getPrioritizedTasks();
 
+    boolean isValid(Task task);
+
     // *******************************************************
     // Удаление задач
     // *******************************************************

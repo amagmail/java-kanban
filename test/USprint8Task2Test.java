@@ -3,6 +3,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
+import java.util.NoSuchElementException;
 
 public class USprint8Task2Test {
 
@@ -94,7 +95,9 @@ public class USprint8Task2Test {
         System.out.println(">> Проверка пересечение интервалов");
         Subtask subtask8 = new Subtask("Подзадача №8", "ОК-008", 4, 10, Managers.stringToDate("2024-12-01 23:05"));
         taskManager.addSubtask(subtask8);
-        Assertions.assertNull(taskManager.getSubtaskByID(8), "Ошибка проверки пересечения интервалов");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(8);
+        }, "Не удалось поймать исключение");
         System.out.println("Валидатор отсек попытку создания подзадачи с идентификатором 8");
         System.out.println();
     }
@@ -117,9 +120,15 @@ public class USprint8Task2Test {
         Assertions.assertNotNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
         Assertions.assertNotNull(taskManager.getEpicByID(3), "Ошибка удаления");
         taskManager.removeEpicByID(3);
-        Assertions.assertNull(taskManager.getSubtaskByID(5), "Ошибка удаления");
-        Assertions.assertNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
-        Assertions.assertNull(taskManager.getEpicByID(3), "Ошибка удаления");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(5);
+        }, "Не удалось поймать исключение");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(6);
+        }, "Не удалось поймать исключение");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getEpicByID(3);
+        }, "Не удалось поймать исключение");
         System.out.println();
     }
 
@@ -129,7 +138,9 @@ public class USprint8Task2Test {
         Assertions.assertNotNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
         Assertions.assertFalse(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");
         taskManager.removeSubtaskByID(7);
-        Assertions.assertNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(7);
+        }, "Не удалось поймать исключение");
         Assertions.assertTrue(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");
         System.out.println();
     }

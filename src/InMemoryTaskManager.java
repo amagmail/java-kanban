@@ -129,7 +129,6 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTaskByID(int id) {
         Task item = tasks.get(id);
         if (item == null) {
-            //System.out.println("WARNING: Не удалось найти элемент типа Task по идентификатору " + id);
             throw new NoSuchElementException("Не удалось найти элемент типа Task по идентификатору " + id);
         } else {
             historyManager.add(item);
@@ -141,7 +140,6 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic getEpicByID(int id) {
         Epic item = epics.get(id);
         if (item == null) {
-            //System.out.println("WARNING: Не удалось найти элемент типа Epic по идентификатору " + id);
             throw new NoSuchElementException("Не удалось найти элемент типа Epic по идентификатору " + id);
         } else {
             historyManager.add(item);
@@ -153,7 +151,6 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask getSubtaskByID(int id) {
         Subtask item = subtasks.get(id);
         if (item == null) {
-            //System.out.println("WARNING: Не удалось найти элемент типа Subtask по идентификатору " + id);
             throw new NoSuchElementException("Не удалось найти элемент типа Subtask по идентификатору " + id);
         } else {
             historyManager.add(item);

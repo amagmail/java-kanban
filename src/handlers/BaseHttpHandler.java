@@ -1,7 +1,10 @@
+package handlers;
+
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import enums.Endpoint;
+import managers.TaskManager;
 
 import java.io.*;
 import java.nio.charset.Charset;

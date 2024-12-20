@@ -1,49 +1,54 @@
+package handlers;
+
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import enums.Endpoint;
-import tasks.Task;
+import managers.Managers;
+import managers.TaskManager;
+import tasks.Subtask;
 
 import java.io.*;
 import java.util.*;
 
-public class TasksHandler extends BaseHttpHandler {
+public class SubtasksHandler extends BaseHttpHandler {
 
-    public TasksHandler(TaskManager taskManager) {
+    public SubtasksHandler(TaskManager taskManager) {
         super(taskManager);
     }
 
-    private Task updateTaskPost(JsonObject jsonObject) {
+    private Subtask updateSubtaskPost(JsonObject jsonObject) {
         int id = jsonObject.get("id").getAsInt();
-        Task task = taskManager.getTaskByID(id);
+        Subtask subtask = taskManager.getSubtaskByID(id);
         if (jsonObject.has("title")) {
-            task.setTitle(jsonObject.get("title").getAsString());
+            subtask.setTitle(jsonObject.get("title").getAsString());
         }
         if (jsonObject.has("description")) {
-            task.setDescription(jsonObject.get("description").getAsString());
+            subtask.setDescription(jsonObject.get("description").getAsString());
         }
-        taskManager.updateTask(task);
-        return task;
+        taskManager.updateSubtask(subtask);
+        return subtask;
     }
 
-    private Task createTaskPost(JsonObject jsonObject) {
+    private Subtask createSubtaskPost(JsonObject jsonObject) {
         String inputTitle = jsonObject.get("title").getAsString();
         String inputDescription = jsonObject.get("description").getAsString();
+        int inputEpicID = jsonObject.get("epicId").getAsInt();
         int inputMinutes = jsonObject.get("minutes").getAsInt();
         String inputDate = jsonObject.get("date").getAsString();
-        Task task = new Task(inputTitle, inputDescription, inputMinutes, Managers.stringToDate(inputDate));
-        if (taskManager.isValid(task)) {
-            taskManager.addTask(task);
+        Subtask subtask = new Subtask(inputTitle, inputDescription, inputEpicID, inputMinutes, Managers.stringToDate(inputDate));
+        if (taskManager.isValid(subtask)) {
+            taskManager.addSubtask(subtask);
         } else {
-            task = null;
+            subtask = null;
         }
-        return task;
+        return subtask;
     }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         int id;
-        Task task;
-        List<Task> tasks;
+        Subtask subtask;
+        List<Subtask> subtasks;
         Optional<Integer> optionVal;
         try {
             String method = exchange.getRequestMethod();
@@ -51,21 +56,21 @@ public class TasksHandler extends BaseHttpHandler {
             Endpoint endpoint = getEndpoint(path, method);
             Gson gson = getGson();
             switch (endpoint) {
-                case GET_TASKS:
-                    tasks = taskManager.getTasks();
-                    writeResponse(exchange, gson.toJson(tasks), 200);
+                case GET_SUBTASKS:
+                    subtasks = taskManager.getSubtasks();
+                    writeResponse(exchange, gson.toJson(subtasks), 200);
                     break;
-                case GET_TASK:
+                case GET_SUBTASK:
                     optionVal = getPathParam(exchange);
                     if (optionVal.isEmpty()) {
-                        writeResponse(exchange, "Некорректный идентификатор задачи", 400);
+                        writeResponse(exchange, "Некорректный идентификатор подзадачи", 400);
                         break;
                     }
                     id = optionVal.get();
-                    task = taskManager.getTaskByID(id);
-                    writeResponse(exchange, gson.toJson(task), 200);
+                    subtask = taskManager.getSubtaskByID(id);
+                    writeResponse(exchange, gson.toJson(subtask), 200);
                     break;
-                case POST_TASKS:
+                case POST_SUBTASKS:
                     JsonElement jsonElement = getRequestBody(exchange);
                     if (jsonElement == null || !jsonElement.isJsonObject()) {
                         writeResponse(exchange, "Не удалось извлечь тело запроса", 400);
@@ -73,8 +78,8 @@ public class TasksHandler extends BaseHttpHandler {
                     }
                     JsonObject jsonObject = jsonElement.getAsJsonObject();
                     if (jsonObject.has("id")) {
-                        task = updateTaskPost(jsonObject);
-                        writeResponse(exchange, gson.toJson(task), 200);
+                        subtask = updateSubtaskPost(jsonObject);
+                        writeResponse(exchange, gson.toJson(subtask), 200);
                     } else {
                         if (!jsonObject.has("title")) {
                             writeResponse(exchange, "Из тела запроса не удалось извлечь обязательный параметр title", 404);
@@ -92,24 +97,24 @@ public class TasksHandler extends BaseHttpHandler {
                             writeResponse(exchange, "Из тела запроса не удалось извлечь обязательный параметр date", 404);
                             break;
                         }
-                        task = createTaskPost(jsonObject);
-                        if (task != null) {
-                            writeResponse(exchange, gson.toJson(task), 200);
+                        subtask = createSubtaskPost(jsonObject);
+                        if (subtask != null) {
+                            writeResponse(exchange, gson.toJson(subtask), 200);
                         } else {
-                            writeResponse(exchange, "Добавляемая задача пересекается с существующей", 406);
+                            writeResponse(exchange, "Добавляемая подзадача пересекается с существующей", 406);
                         }
                     }
                     break;
-                case DELETE_TASK:
+                case DELETE_SUBTASK:
                     optionVal = getPathParam(exchange);
                     if (optionVal.isEmpty()) {
                         writeResponse(exchange, "Некорректный идентификатор задачи", 400);
-                        break;
+                    } else {
+                        id = optionVal.get();
+                        taskManager.getSubtaskByID(id);
+                        taskManager.removeSubtaskByID(id);
+                        writeResponse(exchange, null, 201);
                     }
-                    id = optionVal.get();
-                    taskManager.getTaskByID(id);
-                    taskManager.removeTaskByID(id);
-                    writeResponse(exchange, null, 201);
                     break;
                 default:
                     writeResponse(exchange, "Сервер не обслуживает эндпоинт " + method + path, 501);

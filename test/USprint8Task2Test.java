@@ -1,8 +1,17 @@
+import enums.StatusTask;
+import managers.HistoryManager;
+import managers.Managers;
+import managers.TaskManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+
+import java.util.NoSuchElementException;
 
 public class USprint8Task2Test {
 
@@ -38,13 +47,13 @@ public class USprint8Task2Test {
         Epic epic4 = new Epic("Эпик №4", "ОК-004");
         taskManager.addEpic(epic4);
 
-        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id, 10, Managers.stringToDate("2024-12-01 21:00"));
+        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.getId(), 10, Managers.stringToDate("2024-12-01 21:00"));
         taskManager.addSubtask(subtask5);
 
-        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id, 10, Managers.stringToDate("2024-12-01 22:00"));
+        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.getId(), 10, Managers.stringToDate("2024-12-01 22:00"));
         taskManager.addSubtask(subtask6);
 
-        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id, 10, Managers.stringToDate("2024-12-01 23:00"));
+        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.getId(), 10, Managers.stringToDate("2024-12-01 23:00"));
         taskManager.addSubtask(subtask7);
     }
 
@@ -72,19 +81,19 @@ public class USprint8Task2Test {
     public void checkEpicStatusActualization() {
         System.out.println(">> Проверка актуализации статуса эпика");
         Epic epic3 = taskManager.getEpicByID(3);
-        Assertions.assertEquals(epic3.status, StatusTask.NEW, "Ошибка статуса");
+        Assertions.assertEquals(epic3.getStatus(), StatusTask.NEW, "Ошибка статуса");
         System.out.println("Создан эпик с двумя подзадачами, эпик в статусе NEW");
 
         Subtask subtask5 = taskManager.getSubtaskByID(5);
-        subtask5.status = StatusTask.DONE;
+        subtask5.setStatus(StatusTask.DONE);
         taskManager.updateSubtask(subtask5);
-        Assertions.assertEquals(epic3.status, StatusTask.IN_PROGRESS, "Ошибка статуса");
+        Assertions.assertEquals(epic3.getStatus(), StatusTask.IN_PROGRESS, "Ошибка статуса");
         System.out.println("Выполнена первая подзадача, эпик в статусе IN_PROGRESS");
 
         Subtask subtask6 = taskManager.getSubtaskByID(6);
-        subtask6.status = StatusTask.DONE;
+        subtask6.setStatus(StatusTask.DONE);
         taskManager.updateSubtask(subtask6);
-        Assertions.assertEquals(epic3.status, StatusTask.DONE, "Ошибка статуса");
+        Assertions.assertEquals(epic3.getStatus(), StatusTask.DONE, "Ошибка статуса");
         System.out.println("Выполнена вторая подзадача, эпик в статусе DONE");
         System.out.println();
     }
@@ -94,7 +103,9 @@ public class USprint8Task2Test {
         System.out.println(">> Проверка пересечение интервалов");
         Subtask subtask8 = new Subtask("Подзадача №8", "ОК-008", 4, 10, Managers.stringToDate("2024-12-01 23:05"));
         taskManager.addSubtask(subtask8);
-        Assertions.assertNull(taskManager.getSubtaskByID(8), "Ошибка проверки пересечения интервалов");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(8);
+        }, "Не удалось поймать исключение");
         System.out.println("Валидатор отсек попытку создания подзадачи с идентификатором 8");
         System.out.println();
     }
@@ -103,9 +114,9 @@ public class USprint8Task2Test {
     public void checkUpdateDescription() {
         System.out.println(">> Изменить свойства задачи");
         Task task = taskManager.getTasks().getFirst();
-        task.description = "MODIFIED-FIRST-ITEM";
+        task.setDescription("MODIFIED-FIRST-ITEM");
         taskManager.updateTask(task);
-        Assertions.assertEquals(task.description, "MODIFIED-FIRST-ITEM", "Ошибка редактирования");
+        Assertions.assertEquals(task.getDescription(), "MODIFIED-FIRST-ITEM", "Ошибка редактирования");
         System.out.println("Свойства задачи успешно изменены");
         System.out.println();
     }
@@ -117,9 +128,15 @@ public class USprint8Task2Test {
         Assertions.assertNotNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
         Assertions.assertNotNull(taskManager.getEpicByID(3), "Ошибка удаления");
         taskManager.removeEpicByID(3);
-        Assertions.assertNull(taskManager.getSubtaskByID(5), "Ошибка удаления");
-        Assertions.assertNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
-        Assertions.assertNull(taskManager.getEpicByID(3), "Ошибка удаления");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(5);
+        }, "Не удалось поймать исключение");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(6);
+        }, "Не удалось поймать исключение");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getEpicByID(3);
+        }, "Не удалось поймать исключение");
         System.out.println();
     }
 
@@ -129,7 +146,9 @@ public class USprint8Task2Test {
         Assertions.assertNotNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
         Assertions.assertFalse(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");
         taskManager.removeSubtaskByID(7);
-        Assertions.assertNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(7);
+        }, "Не удалось поймать исключение");
         Assertions.assertTrue(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");
         System.out.println();
     }

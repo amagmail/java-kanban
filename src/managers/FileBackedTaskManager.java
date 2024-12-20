@@ -1,3 +1,12 @@
+package managers;
+
+import enums.StatusTask;
+import enums.TaskTypes;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+import exceptions.ManagerSaveException;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -135,17 +144,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         Integer parentId = null;
         if (taskType == TaskTypes.SUBTASK) {
-            parentId = subtasks.get(task.id).getEpicId();
+            parentId = subtasks.get(task.getId()).getEpicId();
         }
         Integer durMin = null;
-        if (task.duration != null) {
-            durMin = (int) task.duration.toMinutes();
+        if (task.getDuration() != null) {
+            durMin = (int) task.getDuration().toMinutes();
         }
         String startTime = null;
-        if (task.startTime != null) {
-            startTime = task.startTime.format(Managers.dateTimeFormatter);
+        if (task.getStartTime() != null) {
+            startTime = task.getStartTime().format(Managers.dateTimeFormatter);
         }
-        return String.format("%d,%s,%s,%s,%s,%d,%d,%s", task.id, taskType, task.title, task.status, task.description, parentId, durMin, startTime);
+        return String.format("%d,%s,%s,%s,%s,%d,%d,%s", task.getId(), taskType, task.getTitle(), task.getStatus(), task.getDescription(), parentId, durMin, startTime);
     }
 
     private int loadFromFile() {
@@ -227,19 +236,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private void restoreTask(Task task, int id, StatusTask status) {
-        task.status = status;
+        task.setStatus(status);
         super.sequence = id - 1;
         super.addTask(task);
     }
 
     private void restoreSubtask(Subtask subtask, int id, StatusTask status) {
-        subtask.status = status;
+        subtask.setStatus(status);
         super.sequence = id - 1;
         super.addSubtask(subtask);
     }
 
     private void restoreEpic(Epic epic, int id, StatusTask status) {
-        epic.status = status;
+        epic.setStatus(status);
         super.sequence = id - 1;
         super.addEpic(epic);
     }

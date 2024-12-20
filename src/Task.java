@@ -45,12 +45,12 @@ public class Task {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Task item = (Task) obj;
-        return Objects.equals(title, item.title) && Objects.equals(description, item.description) && (id == item.id);
+        return (id == item.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, id);
+        return Objects.hash(id);
     }
 }
 

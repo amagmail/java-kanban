@@ -6,9 +6,9 @@ public class HttpTaskServer {
 
     private static final int PORT = 8080;
 
-    public TaskManager taskManager;
+    private final TaskManager taskManager;
 
-    public HttpServer httpServer;
+    private HttpServer httpServer;
 
     public HttpTaskServer(TaskManager taskManager) {
         this.taskManager = taskManager;

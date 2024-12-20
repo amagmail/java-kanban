@@ -27,6 +27,7 @@ public class BaseHttpHandler implements HttpHandler {
 
     protected void writeResponse(HttpExchange exchange, String responseString, int responseCode) throws IOException {
         try (OutputStream os = exchange.getResponseBody()) {
+            exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
             exchange.sendResponseHeaders(responseCode, 0);
             if (responseString != null) {
                 os.write(responseString.getBytes(DEFAULT_CHARSET));
@@ -63,5 +64,80 @@ public class BaseHttpHandler implements HttpHandler {
                 .registerTypeAdapter(LocalDateTime.class, new TypeAdapterLocalDateTime())
                 .create();
     }
+
+    protected Endpoint getEndpoint(String requestPath, String requestMethod) {
+        String[] pathParts = requestPath.split("/");
+        if (requestMethod.equals("GET")) {
+            if (pathParts[1].equals("tasks")) {
+                if (pathParts.length == 2) {
+                    return Endpoint.GET_TASKS;
+                } else if (pathParts.length == 3) {
+                    return Endpoint.GET_TASK;
+                }
+            }
+            if (pathParts[1].equals("subtasks")) {
+                if (pathParts.length == 2) {
+                    return Endpoint.GET_SUBTASKS;
+                } else if (pathParts.length == 3) {
+                    return Endpoint.GET_SUBTASK;
+                }
+            }
+            if (pathParts[1].equals("epics")) {
+                if (pathParts.length == 2) {
+                    return Endpoint.GET_EPICS;
+                } else if (pathParts.length == 3) {
+                    return Endpoint.GET_EPIC;
+                } else if (pathParts.length == 4) {
+                    return Endpoint.GET_EPIC_SUBTASKS;
+                }
+            }
+            if (pathParts[1].equals("history")) {
+                if (pathParts.length == 2) {
+                    return Endpoint.GET_HISTORY;
+                }
+            }
+            if (pathParts[1].equals("prioritized")) {
+                if (pathParts.length == 2) {
+                    return Endpoint.GET_PRIORITIZED;
+                }
+            }
+        }
+        if (requestMethod.equals("DELETE")) {
+            if (pathParts[1].equals("tasks")) {
+                if (pathParts.length == 3) {
+                    return Endpoint.DELETE_TASK;
+                }
+            }
+            if (pathParts[1].equals("subtasks")) {
+                if (pathParts.length == 3) {
+                    return Endpoint.DELETE_SUBTASK;
+                }
+            }
+            if (pathParts[1].equals("epics")) {
+                if (pathParts.length == 3) {
+                    return Endpoint.DELETE_EPIC;
+                }
+            }
+        }
+        if (requestMethod.equals("POST")) {
+            if (pathParts[1].equals("tasks")) {
+                if (pathParts.length == 2) {
+                    return Endpoint.POST_TASKS;
+                }
+            }
+            if (pathParts[1].equals("subtasks")) {
+                if (pathParts.length == 2) {
+                    return Endpoint.POST_SUBTASKS;
+                }
+            }
+            if (pathParts[1].equals("epics")) {
+                if (pathParts.length == 2) {
+                    return Endpoint.POST_EPICS;
+                }
+            }
+        }
+        return Endpoint.UNKNOWN;
+    }
+
 
 }

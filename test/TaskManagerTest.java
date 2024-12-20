@@ -1,7 +1,11 @@
+import enums.StatusTask;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +42,13 @@ public class TaskManagerTest {
         Epic epic4 = new Epic("Эпик №4", "ОК-004");
         taskManager.addEpic(epic4);
 
-        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id);
+        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.getId());
         taskManager.addSubtask(subtask5);
 
-        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id);
+        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.getId());
         taskManager.addSubtask(subtask6);
 
-        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id);
+        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.getId());
         taskManager.addSubtask(subtask7);
     }
 
@@ -52,16 +56,16 @@ public class TaskManagerTest {
     public void checkUpdateDescription() {
         System.out.println(">> Изменить свойство задачи");
         Task task = taskManager.getTasks().getFirst();
-        task.description = "MODIFIED-FIRST-ITEM";
+        task.setDescription("MODIFIED-FIRST-ITEM");
         taskManager.updateTask(task);
-        Assertions.assertEquals(task.description, "MODIFIED-FIRST-ITEM", "Ошибка редактирования");
+        Assertions.assertEquals(task.getDescription(), "MODIFIED-FIRST-ITEM", "Ошибка редактирования");
     }
 
     @Test
     public void checkUpdateStatuses() {
         System.out.println(">> Изменить статус задачи");
         Subtask subtask = taskManager.getSubtasks().getFirst();
-        subtask.status = StatusTask.DONE;
+        subtask.setStatus(StatusTask.DONE);
         taskManager.updateSubtask(subtask);
         Assertions.assertEquals(taskManager.getEpicByID(subtask.getEpicId()).getStatus(), StatusTask.IN_PROGRESS, "Ошибка редактирования");
     }

@@ -1,4 +1,7 @@
+package tasks;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Subtask extends Task {
 
@@ -16,11 +19,12 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String result = "Subtask{";
         result += "id=" + id + ",title='" + title + "',description='" + description + ",epic=" + epicId;
         result += "}, status=" + status;
         if (duration != null && startTime != null) {
-            result +=  ", duration=[" + startTime.format(Managers.dateTimeFormatter) + ", " + getEndTime().format(Managers.dateTimeFormatter) + "]";
+            result +=  ", duration=[" + startTime.format(dateTimeFormatter) + ", " + getEndTime().format(dateTimeFormatter) + "]";
         }
         return result;
     }

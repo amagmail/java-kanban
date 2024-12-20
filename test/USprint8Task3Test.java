@@ -3,6 +3,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
 public class USprint8Task3Test {
 
@@ -34,13 +37,13 @@ public class USprint8Task3Test {
         Epic epic4 = new Epic("Эпик №4", "ОК-004");
         taskManager.addEpic(epic4);
 
-        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id, 10, Managers.stringToDate("2024-12-01 21:00"));
+        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.getId(), 10, Managers.stringToDate("2024-12-01 21:00"));
         taskManager.addSubtask(subtask5);
 
-        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id, 10, Managers.stringToDate("2024-12-01 22:00"));
+        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.getId(), 10, Managers.stringToDate("2024-12-01 22:00"));
         taskManager.addSubtask(subtask6);
 
-        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id, 10, Managers.stringToDate("2024-12-01 23:00"));
+        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.getId(), 10, Managers.stringToDate("2024-12-01 23:00"));
         taskManager.addSubtask(subtask7);
 
         // Сформировать историю просмотра задач
@@ -61,7 +64,7 @@ public class USprint8Task3Test {
 
     @Test
     public void checkFirstItemHistory() {
-        System.out.println(">> Получить первый элемент истории: id = " + historyManager.getHistory().getFirst().id);
+        System.out.println(">> Получить первый элемент истории: id = " + historyManager.getHistory().getFirst().getId());
         printHistory();
         Assertions.assertEquals(historyManager.getHistory().getFirst(), taskManager.getTaskByID(2), "История просмотра задач отображается неверно");
         System.out.println();
@@ -69,7 +72,7 @@ public class USprint8Task3Test {
 
     @Test
     public void checkLastItemHistory() {
-        System.out.println(">> Получить последний элемент истории: id = " + historyManager.getHistory().getLast().id);
+        System.out.println(">> Получить последний элемент истории: id = " + historyManager.getHistory().getLast().getId());
         printHistory();
         Assertions.assertEquals(historyManager.getHistory().getLast(), taskManager.getEpicByID(3), "История просмотра задач отображается неверно");
         System.out.println();

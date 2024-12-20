@@ -1,3 +1,5 @@
+import tasks.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -9,11 +11,11 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public void add(Task data) {
         Node<Task> newNode = new Node<>(data);
-        if (history.structure.containsKey(data.id)) {
-            remove(data.id);
+        if (history.structure.containsKey(data.getId())) {
+            remove(data.getId());
         }
         history.linkLast(newNode);
-        history.structure.put(data.id, newNode);
+        history.structure.put(data.getId(), newNode);
     }
 
     public void remove(int id) {

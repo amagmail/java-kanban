@@ -1,3 +1,8 @@
+import enums.StatusTask;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -23,33 +28,33 @@ public class Main {
         Epic epic4 = new Epic("Эпик №4", "ОК-004");
         taskManager.addEpic(epic4);
 
-        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id, 10, Managers.stringToDate("2024-12-01 21:00"));
+        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.getId(), 10, Managers.stringToDate("2024-12-01 21:00"));
         taskManager.addSubtask(subtask5);
 
-        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id, 10, Managers.stringToDate("2024-12-01 22:00"));
+        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.getId(), 10, Managers.stringToDate("2024-12-01 22:00"));
         taskManager.addSubtask(subtask6);
 
-        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id, 10, Managers.stringToDate("2024-12-01 23:00"));
+        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.getId(), 10, Managers.stringToDate("2024-12-01 23:00"));
         taskManager.addSubtask(subtask7);
 
         // Тестирование редактирования свойств
-        task2.description = "MODIFIED-002";
+        task2.setDescription("MODIFIED-002");
         taskManager.updateTask(task2);
 
-        epic3.description = "MODIFIED-004";
+        epic3.setDescription("MODIFIED-004");
         taskManager.updateEpic(epic3);
 
-        subtask6.description = "MODIFIED-006";
+        subtask6.setDescription("MODIFIED-006");
         taskManager.updateSubtask(subtask6);
 
         // Тестирование редактирования статусов
-        task1.status = StatusTask.IN_PROGRESS;
+        task1.setStatus(StatusTask.IN_PROGRESS);
         taskManager.updateTask(task1);
 
-        task2.status = StatusTask.DONE;
+        task2.setStatus(StatusTask.DONE);
         taskManager.updateTask(task2);
 
-        subtask5.status = StatusTask.DONE;
+        subtask5.setStatus(StatusTask.DONE);
         taskManager.updateSubtask(subtask5);
 
         // Вывести на печать задачи
@@ -121,7 +126,7 @@ public class Main {
         System.out.println(">> Вывести на печать эпики с подзадачами");
         for (Task epic : taskManager.getEpics()) {
             System.out.println(epic);
-            for (Task subtask : taskManager.getEpicSubtasksByID(epic.id)) {
+            for (Task subtask : taskManager.getEpicSubtasksByID(epic.getId())) {
                 System.out.println("* " + subtask);
             }
         }

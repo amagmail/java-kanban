@@ -1,6 +1,10 @@
+package tasks;
+
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import enums.StatusTask;
 
 public class Task {
 
@@ -25,17 +29,66 @@ public class Task {
         this.startTime = date;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public StatusTask getStatus() {
+        return status;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
     public LocalDateTime getEndTime() {
         return startTime.plus(duration);
     }
 
+    public void setStatus(StatusTask status) {
+        this.status = status;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
     @Override
     public String toString() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String result = "Task{";
         result += "id=" + id + ",title='" + title + "',description='" + description;
         result += "}, status=" + status;
         if (duration != null && startTime != null) {
-            result +=  ", duration=[" + startTime.format(Managers.dateTimeFormatter) + ", " + getEndTime().format(Managers.dateTimeFormatter) + "]";
+            result +=  ", duration=[" + startTime.format(dateTimeFormatter) + ", " + getEndTime().format(dateTimeFormatter) + "]";
         }
         return result;
     }

@@ -1,5 +1,8 @@
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
+import enums.Endpoint;
+import tasks.Subtask;
+
 import java.io.*;
 import java.util.*;
 
@@ -13,10 +16,10 @@ public class SubtasksHandler extends BaseHttpHandler {
         int id = jsonObject.get("id").getAsInt();
         Subtask subtask = taskManager.getSubtaskByID(id);
         if (jsonObject.has("title")) {
-            subtask.title = jsonObject.get("title").getAsString();
+            subtask.setTitle(jsonObject.get("title").getAsString());
         }
         if (jsonObject.has("description")) {
-            subtask.description = jsonObject.get("description").getAsString();
+            subtask.setDescription(jsonObject.get("description").getAsString());
         }
         taskManager.updateSubtask(subtask);
         return subtask;

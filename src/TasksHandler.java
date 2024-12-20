@@ -1,5 +1,8 @@
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
+import enums.Endpoint;
+import tasks.Task;
+
 import java.io.*;
 import java.util.*;
 
@@ -13,10 +16,10 @@ public class TasksHandler extends BaseHttpHandler {
         int id = jsonObject.get("id").getAsInt();
         Task task = taskManager.getTaskByID(id);
         if (jsonObject.has("title")) {
-            task.title = jsonObject.get("title").getAsString();
+            task.setTitle(jsonObject.get("title").getAsString());
         }
         if (jsonObject.has("description")) {
-            task.description = jsonObject.get("description").getAsString();
+            task.setDescription(jsonObject.get("description").getAsString());
         }
         taskManager.updateTask(task);
         return task;

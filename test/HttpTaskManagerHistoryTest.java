@@ -5,10 +5,14 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
 public class HttpTaskManagerHistoryTest {
 
@@ -41,13 +45,13 @@ public class HttpTaskManagerHistoryTest {
         Epic epic4 = new Epic("Эпик №4", "ОК-004");
         taskManager.addEpic(epic4);
 
-        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id, 10, Managers.stringToDate("2024-12-01 21:00"));
+        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.getId(), 10, Managers.stringToDate("2024-12-01 21:00"));
         taskManager.addSubtask(subtask5);
 
-        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id, 10, Managers.stringToDate("2024-12-01 22:00"));
+        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.getId(), 10, Managers.stringToDate("2024-12-01 22:00"));
         taskManager.addSubtask(subtask6);
 
-        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id, 10, Managers.stringToDate("2024-12-01 23:00"));
+        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.getId(), 10, Managers.stringToDate("2024-12-01 23:00"));
         taskManager.addSubtask(subtask7);
 
         taskManager.getTaskByID(1);

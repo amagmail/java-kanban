@@ -1,5 +1,9 @@
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
+import enums.Endpoint;
+import tasks.Epic;
+import tasks.Subtask;
+
 import java.io.*;
 import java.util.*;
 
@@ -13,10 +17,10 @@ public class EpicsHandler extends BaseHttpHandler {
         int id = jsonObject.get("id").getAsInt();
         Epic epic = taskManager.getEpicByID(id);
         if (jsonObject.has("title")) {
-            epic.title = jsonObject.get("title").getAsString();
+            epic.setTitle(jsonObject.get("title").getAsString());
         }
         if (jsonObject.has("description")) {
-            epic.description = jsonObject.get("description").getAsString();
+            epic.setDescription(jsonObject.get("description").getAsString());
         }
         taskManager.updateEpic(epic);
         return epic;

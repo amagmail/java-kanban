@@ -1,3 +1,9 @@
+package managers;
+
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+
 import java.util.List;
 import java.util.Set;
 
@@ -41,6 +47,8 @@ public interface TaskManager {
     List<Task> getHistory();
 
     Set<Task> getPrioritizedTasks();
+
+    boolean isValid(Task task);
 
     // *******************************************************
     // Удаление задач

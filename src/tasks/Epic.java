@@ -1,6 +1,11 @@
+package tasks;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import enums.StatusTask;
 
 public class Epic extends Task {
 
@@ -12,21 +17,22 @@ public class Epic extends Task {
         setStatus(StatusTask.NEW);
     }
 
-    public StatusTask getStatus() {
-        return status;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public void setStatus(StatusTask status) {
-        this.status = status;
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     @Override
     public String toString() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String result = "Epic{";
         result += "id=" + id + ",title='" + title + "',description='" + description + ",subtasks=" + subtaskIds.toString();
         result += "}, status=" + getStatus();
         if (duration != null && startTime != null) {
-            result +=  ", duration=[" + startTime.format(printFormat) + ", " + getEndTime().format(printFormat) + "]";
+            result +=  ", duration=[" + startTime.format(dateTimeFormatter) + ", " + getEndTime().format(dateTimeFormatter) + "]";
         }
         return result;
     }

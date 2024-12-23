@@ -1,10 +1,18 @@
+import enums.StatusTask;
+import managers.HistoryManager;
+import managers.Managers;
+import managers.TaskManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class TaskManagerTest {
 
@@ -37,13 +45,13 @@ public class TaskManagerTest {
         Epic epic4 = new Epic("Эпик №4", "ОК-004");
         taskManager.addEpic(epic4);
 
-        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.id);
+        Subtask subtask5 = new Subtask("Подзадача №5", "ОК-005", epic3.getId());
         taskManager.addSubtask(subtask5);
 
-        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.id);
+        Subtask subtask6 = new Subtask("Подзадача №6", "ОК-006", epic3.getId());
         taskManager.addSubtask(subtask6);
 
-        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.id);
+        Subtask subtask7 = new Subtask("Подзадача №7", "ОК-007", epic4.getId());
         taskManager.addSubtask(subtask7);
     }
 
@@ -51,16 +59,16 @@ public class TaskManagerTest {
     public void checkUpdateDescription() {
         System.out.println(">> Изменить свойство задачи");
         Task task = taskManager.getTasks().getFirst();
-        task.description = "MODIFIED-FIRST-ITEM";
+        task.setDescription("MODIFIED-FIRST-ITEM");
         taskManager.updateTask(task);
-        Assertions.assertEquals(task.description, "MODIFIED-FIRST-ITEM", "Ошибка редактирования");
+        Assertions.assertEquals(task.getDescription(), "MODIFIED-FIRST-ITEM", "Ошибка редактирования");
     }
 
     @Test
     public void checkUpdateStatuses() {
         System.out.println(">> Изменить статус задачи");
         Subtask subtask = taskManager.getSubtasks().getFirst();
-        subtask.status = StatusTask.DONE;
+        subtask.setStatus(StatusTask.DONE);
         taskManager.updateSubtask(subtask);
         Assertions.assertEquals(taskManager.getEpicByID(subtask.getEpicId()).getStatus(), StatusTask.IN_PROGRESS, "Ошибка редактирования");
     }
@@ -81,9 +89,15 @@ public class TaskManagerTest {
         Assertions.assertNotNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
         Assertions.assertNotNull(taskManager.getEpicByID(3), "Ошибка удаления");
         taskManager.removeEpicByID(3);
-        Assertions.assertNull(taskManager.getSubtaskByID(5), "Ошибка удаления");
-        Assertions.assertNull(taskManager.getSubtaskByID(6), "Ошибка удаления");
-        Assertions.assertNull(taskManager.getEpicByID(3), "Ошибка удаления");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(5);
+        }, "Не удалось поймать исключение");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(6);
+        }, "Не удалось поймать исключение");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getEpicByID(3);
+        }, "Не удалось поймать исключение");
     }
 
     @Test
@@ -92,8 +106,10 @@ public class TaskManagerTest {
         Assertions.assertNotNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
         Assertions.assertFalse(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");
         taskManager.removeSubtaskByID(7);
-        Assertions.assertNull(taskManager.getSubtaskByID(7), "Ошибка удаления");
-        Assertions.assertTrue(taskManager.getEpicByID(4).getSubtaskIds().isEmpty(), "Ошибка удаления");
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            taskManager.getSubtaskByID(7);
+        }, "Не удалось поймать исключение");
+        Assertions.assertNotNull(taskManager.getEpicByID(4), "Ошибка удаления");
     }
 
 }
